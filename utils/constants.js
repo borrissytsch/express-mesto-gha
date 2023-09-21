@@ -3,7 +3,7 @@ require('dotenv').config();
 const { PORT = 3000
   , USERS_ROUTE: USERS = "/users"
   , CARDS_ROUTE: CARDS = "/cards"
-  , MONGODB = "mongodb://127.0.0.1:27017/mestodb"
+  , MONGODB = "mongodb://127.0.0.1:27017/mestodb"                     // really was moved 2 app 2 pass tests
 } = process.env;
 // Server routing consts
 const userDirs = {id: "userId", profile: "me", avatar: "avatar"};
@@ -29,6 +29,6 @@ const errIncorrectData = { num: 400
 }
 
 module.exports = { PORT, USERS, CARDS, MONGODB
-  , userDirs, cardDirs, userRoutes, cardRoutes, logger
+  , userDirs, cardDirs, userRoutes, cardRoutes, logger, errDefault
 }
 
