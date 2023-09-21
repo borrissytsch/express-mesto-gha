@@ -11,19 +11,22 @@ function getUsers(req, res) {
 
 function getUserById(req, res) {
   const {userId} = req.params;
-                                                                            //console.log(`Find user: ${userId}`)
+                                                                            // console.log(`Find user: ${userId}`);
   User.find({_id: userId}).then(mongUser => {
-    const {name, about, avatar, _id} = mongUser[0];
-    const user = { name: name, about: about, avatar: avatar, _id: _id}
-                                                                            //console.log(user);
-    res.send({data: user})
+                                                                            // console.log(mongUser[0]);
+    if(mongUser[0]) {                                                       // Promise.reject(`User ${userId} doesn't exist, try anothe _id`)
+      const {name, about, avatar, _id} = mongUser[0];
+      const user = { name: name, about: about, avatar: avatar, _id: _id}
+      console.log(user);
+      res.send({data: user})
+    }
   }).catch(err => console.log(err));
 }
 
 function createUser(req, res) {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar }).then(user => {
-                                                                            //console.log(`POST response sent: ${user}`)
+    console.log(`POST response sent: ${user}`)
     res.send({ data: user })
   }).catch(err => {
     console.log(`Error ${errDefault.num}: ${errDefault.msg}`);
