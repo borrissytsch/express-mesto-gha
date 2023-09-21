@@ -14,12 +14,11 @@ function getUserById(req, res) {
                                                                             // console.log(`Find user: ${userId}`);
   User.find({_id: userId}).then(mongUser => {
                                                                             // console.log(mongUser[0]);
-    if(mongUser[0]) {                                                       // Promise.reject(`User ${userId} doesn't exist, try anothe _id`)
-      const {name, about, avatar, _id} = mongUser[0];
-      const user = { name: name, about: about, avatar: avatar, _id: _id}
-      console.log(user);
-      res.send({data: user})
-    }
+    if(!mongUser[0]) return  Promise.reject(`User ${userId} doesn't exist, try another _id`);
+    const {name, about, avatar, _id} = mongUser[0];
+    const user = { name: name, about: about, avatar: avatar, _id: _id}
+    console.log(user);
+    res.send({data: user})
   }).catch(err => console.log(err));
 }
 
