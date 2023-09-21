@@ -1,4 +1,5 @@
-const {PORT, MONGODB, logger} = require('./utils/constants');
+const {PORT, logger} = require('./utils/constants');
+const {MONGODB = "mongodb://127.0.0.1:27017/mestodb"} =  process.env;
 const router = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const express = require('express');
