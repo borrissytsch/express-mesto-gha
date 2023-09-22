@@ -54,8 +54,8 @@ function updateProfile (req, res) {
                                                                             // console.log(`Mongo update res: ${user}`);
     res.send({ data: user })
   }).catch(err => {
-    console.log(`Error ${errDefault.num}: ${errDefault.msg}`);
-    res.status(errDefault.num).send({ message: errDefault.msg })
+    console.log(`Error ${errIncorrectData.num}: ${errIncorrectData.msg}`);
+    res.status(errIncorrectData.num).send({ message: errIncorrectData.msg })
   }));
 }
 
