@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 });
 app.use('/', router);
 app.use('/', cardRouter);
-app.use('/*', () => {console.log("Path 2 be processed doesn't occurred")})
+app.use('/*', () => {console.log("Path 2 be processed doesn't exist")})
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

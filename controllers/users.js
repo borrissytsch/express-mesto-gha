@@ -1,4 +1,4 @@
-const { USERS, userDirs, errDefault } = require('../utils/constants');
+const { USERS, userDirs, errIncorrectData, errNotFound , errDefault } = require('../utils/constants');
 const User = require('../models/user');
 const { id: userId } = userDirs;
 
@@ -35,8 +35,8 @@ function createUser(req, res) {
     console.log(`POST response sent:  ${user}`)
     res.send({ data: user })
   }).catch(err => {
-    console.log(`Error ${errDefault.num}: ${errDefault.msg}`);
-    res.status(errDefault.num).send({ message: errDefault.msg })
+    console.log(`Error ${errIncorrectData.num}: ${errIncorrectData.msg}`);
+    res.status(errIncorrectData.num).send({ message: errIncorrectData.msg })
   });
 }
 
