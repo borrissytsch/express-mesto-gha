@@ -33,16 +33,23 @@ function deleteCardById(req, res) {
 }
 
 function likeCard(req, res) {
-  console.log(`Card 2 like ${req.params.cardId} 4 user: ${req.user._id}`);
-  Card.findByIdAndUpdate(req.params.cardId
-    , { $addToSet: { likes: req.user._id } }, { new: true }     // добавить _id в массив, если его там нет
-  ).then(card => {
-  console.log(`Liked card: ${card}`);
-    res.send({ data: card })
-  }).catch(err => {
-    console.log(`Error ${errDefault.num}: ${errDefault.msg}`);
-    res.status(errDefault.num).send({ message: errDefault.msg })
-  });
+                                                                  // console.log(`Card 2 like ${req.params.cardId} 4 user: ${req.user._id}`);
+  try {
+    if (!req.params.cardId.match(/^[0-9a-f]+$/)) throw new Error(`Incorrect _id: ${req.params.cardId}; try another one, please`);
+    Card.findByIdAndUpdate(req.params.cardId
+      , { $addToSet: { likes: req.user._id } }, { new: true }     // добавить _id в массив, если его там нет
+    ).then(card => {
+      if(!card) return  Promise.reject(`User ${req.params.cardId} doesn't exist, try another _id`);
+                                                                  // console.log(`Liked card: ${card}`);
+      res.send({ data: card })
+    }).catch(err => {
+      console.log(`Error ${errNotFound.num}: ${err}`);
+      res.status(errNotFound.num).send({ message: errNotFound.msg })
+    });
+  } catch (err) {
+    console.log(`Error ${errIncorrectData.num}: ${errIncorrectData.msg}`);
+    res.status(errIncorrectData.num).send({ message: errIncorrectData.msg })
+  }
 }
 
 function dislikeCard(req, res) {
