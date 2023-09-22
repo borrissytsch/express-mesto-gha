@@ -30,6 +30,6 @@ const errIncorrectData = { num: 400
 
 module.exports = { PORT, USERS, CARDS, MONGODB
   , userDirs, cardDirs, userRoutes, cardRoutes, logger
-  , errIncorrectData, errNotFound , errDefault
+  , errIncorrectData, errNotFound, errDefault
 }
 

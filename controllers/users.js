@@ -34,7 +34,7 @@ function getUserById(req, res) {
 function createUser(req, res) {
   const { name, about, avatar } = req.body;
   User.create({ name, about, avatar }).then(user => {
-    console.log(`POST response sent:  ${user}`)
+                                                                            // console.log(`POST response sent:  ${user}`)
     res.send({ data: user })
   }).catch(err => {
     console.log(`Error ${errIncorrectData.num}: ${errIncorrectData.msg}`);

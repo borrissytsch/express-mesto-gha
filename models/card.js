@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-//const User = require('../models/user');
 const cardSchema = new mongoose.Schema({
   name: { type: String
     , required: true

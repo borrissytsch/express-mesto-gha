@@ -1,23 +1,23 @@
-const { CARDS, cardDirs, errDefault } = require('../utils/constants');
+const { CARDS, cardDirs, errIncorrectData, errNotFound, errDefault } = require('../utils/constants');
 const Card = require('../models/card');
 const { id: cardId } = cardDirs;
 
 function getCards(req, res) {
   Card.find({}).then(cardList => {
-    console.log(cardList.join('/ '));
+                                                                // console.log(cardList.join('/ '));
     res.send({data: cardList});
   }).catch(err => console.log(err));
 }
 
 function createCard(req, res) {
                                                                 // console.log(req.body);
-  const { name, link, owner, likes } = req.body;
+  const { name, link, owner = null, likes } = req.body;
   Card.create({ name, link, owner, likes }).then(card => {
                                                                 // console.log(`POST response 2 card sent: ${card}`)
-    res.send({ data: card })
+    res.send({ data: {name: card.name, link: card.link, owner: card.owner, likes: card.likes} });
   }).catch(err => {
-    console.log(`Error ${errDefault.num}: ${errDefault.msg}`);
-    res.status(errDefault.num).send({ message: errDefault.msg })
+    console.log(`Error ${errIncorrectData.num}: ${errIncorrectData.msg}`);
+    res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
   });
 }
 
