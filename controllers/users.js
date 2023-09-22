@@ -27,7 +27,7 @@ function getUserById(req, res) {
     });
   } catch (err) {
     console.log(`Error ${errIncorrectData.num}: ${err}`);
-    res.status(errIncorrectData.num).send({ message: ""});
+    res.status(errIncorrectData.num).send({ message: null});
   };
 }
 
