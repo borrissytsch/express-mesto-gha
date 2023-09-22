@@ -26,7 +26,7 @@ function deleteCardById(req, res) {
   try {
     if (!req.params.cardId.match(/^[0-9a-f]+$/)) throw new Error(`Incorrect _id: ${req.params.cardId}; try another one, please`);
     Card.findByIdAndRemove(req.params.cardId).then(card => {
-                                                                  // console.log(`Deleted card: ${card}`);
+                                                                // console.log(`Deleted card: ${card}`);
       if(!card) return  Promise.reject(`User ${req.params.cardId} doesn't exist, try another _id`);
       res.send({ data: card })
     }).catch(err => {
@@ -61,15 +61,22 @@ function likeCard(req, res) {
 
 function dislikeCard(req, res) {
                                                                 // console.log(`Card 2 dislike ${req.params.cardId} 4 user: ${req.user._id}`);
-  Card.findByIdAndUpdate(req.params.cardId
-    , { $pull: { likes: req.user._id } }, { new: true }         // убрать _id из массива
-  ).then(card => {
-                                                                // console.log(`Disliked card: ${card}`);
-    res.send({ data: card })
-  }).catch(err => {
-    console.log(`Error ${errDefault.num}: ${errDefault.msg}`);
-    res.status(errDefault.num).send({ message: errDefault.msg })
-  });
+  try {
+    if (!req.params.cardId.match(/^[0-9a-f]+$/)) throw new Error(`Incorrect _id: ${req.params.cardId}; try another one, please`);
+    Card.findByIdAndUpdate(req.params.cardId
+      , { $pull: { likes: req.user._id } }, { new: true }         // убрать _id из массива
+    ).then(card => {
+      if(!card) return  Promise.reject(`User ${req.params.cardId} doesn't exist, try another _id`);
+                                                                  // console.log(`Disliked card: ${card}`);
+      res.send({ data: card })
+    }).catch(err => {
+      console.log(`Error ${errNotFound.num}: ${err}`);
+      res.status(errNotFound.num).send({ message: errNotFound.msg })
+    });
+  } catch (err) {
+    console.log(`Error ${errIncorrectData.num}: ${errIncorrectData.msg}`);
+    res.status(errIncorrectData.num).send({ message: errIncorrectData.msg })
+  }
 }
 
 module.exports = { getCards, createCard, deleteCardById, likeCard, dislikeCard }
