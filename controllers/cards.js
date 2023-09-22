@@ -13,9 +13,8 @@ function createCard(req, res) {
   console.log(req.body);
   const { name, link, owner = null, likes } = req.body;
   Card.create({ name, link, owner, likes }).then(card => {
-    console.log(`POST response 2 card sent: ${{name: card.name, link: card.link, owner: card.owner, likes: card.likes}}`)
-    res.send({ data: {name: card.name, link: card.link,/* owner: card.owner,*/ likes: card.likes} });
-    // res.send( {name: card.name, link: card.link, /*owner: card.owner,*/ likes: card.likes} );
+                                                                // console.log(`POST response 2 card sent: ${Object.entries({name: card.name, link: card.link, owner: card.owner, likes: card.likes, _id: card._id}).join('; ')}`);
+    res.send({ data: {name: card.name, link: card.link, owner: card.owner, likes: card.likes, _id: card._id} });
   }).catch(err => {
     console.log(`Error ${errIncorrectData.num}: ${errIncorrectData.msg}`);
     res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
