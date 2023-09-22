@@ -26,7 +26,10 @@ function getUserById(req, res) {
     const user = { name: name, about: about, avatar: avatar, _id: _id}
                                                                             // console.log(`User 2 send 4 response: ${Object.entries(user).join('; ')}`);
     res.send({data: user})
-  }).catch(err => console.log(err));
+  }).catch(err => {
+    console.log(`Error ${errNotFound.num}: ${err}`);
+    res.status(errNotFound.num).send({ message: errNotFound.msg })
+  });
 }
 
 function createUser(req, res) {

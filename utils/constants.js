@@ -22,7 +22,7 @@ const logger = (req, res, next, logTrace_flag = false, logTrace_msg = 'Request h
 /* Error processing config consts */
 const errIncorrectData = { num: 400
     , msg: "Incorrect data were sent to card/user create or profile/avatar update methods"
-  } , errNotFound = {nume: 404
+  } , errNotFound = {num: 404
     , msg: "Card/user not found"
   } , errDefault = {num: 500
     , msg: "Error occurred"
