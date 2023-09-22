@@ -23,13 +23,20 @@ function createCard(req, res) {
 
 function deleteCardById(req, res) {
                                                                 // console.log(req.params.cardId);
-  Card.findByIdAndRemove(req.params.cardId).then(card => {
-                                                                // console.log(`Deleted card: ${card}`);
-    res.send({ data: card })
-  }).catch(err => {
-    console.log(`Error ${errDefault.num}: ${errDefault.msg}`);
-    res.status(errDefault.num).send({ message: errDefault.msg })
-  });
+  try {
+    if (!req.params.cardId.match(/^[0-9a-f]+$/)) throw new Error(`Incorrect _id: ${req.params.cardId}; try another one, please`);
+    Card.findByIdAndRemove(req.params.cardId).then(card => {
+                                                                  // console.log(`Deleted card: ${card}`);
+      if(!card) return  Promise.reject(`User ${req.params.cardId} doesn't exist, try another _id`);
+      res.send({ data: card })
+    }).catch(err => {
+      console.log(`Error ${errNotFound.num}: ${err}`);
+      res.status(errNotFound.num).send({ message: errNotFound.msg })
+    });
+  } catch (err) {
+    console.log(`Error ${errIncorrectData.num}: ${errIncorrectData.msg}`);
+    res.status(errIncorrectData.num).send({ message: errIncorrectData.msg })
+  }
 }
 
 function likeCard(req, res) {
