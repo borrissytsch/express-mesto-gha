@@ -14,7 +14,7 @@ const userRoutes = { userId: `${USERS}/:${userDirs.id}`
     cardId: `${CARDS}/:${cardDirs.id}`, cardLikes: `${CARDS}/:${cardDirs.id}/${cardDirs.likes}`
 }
 /* Router common consts */
-const logger = (req, res, next, logTrace_flag = false, logTrace_msg = 'Request has been logged on') => {
+const logger = (req, res, next, logTrace_flag = false, logTrace_msg = 'Request is logged on') => {
   if(logTrace_flag) console.log(logTrace_msg);
   next();
 }

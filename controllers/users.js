@@ -10,26 +10,25 @@ function getUsers(req, res) {
 }
 
 function getUserById(req, res) {
-  const {userId} = req.params;
-                                                                            // console.log(`Find user: ${userId}`);
-/*  User.find({_id: userId}).then(mongUser => {
-                                                                            //console.log(mongUser[0]);
-    if(!mongUser[0]) return  Promise.reject(`User ${userId} doesn't exist, try another _id`);
-    const {name, about, avatar, _id} = mongUser[0];
-    const user = { name: name, about: about, avatar: avatar, _id: _id}
-    console.log(user);
-    res.send({data: user}) */
-  User.findById(userId).then(mongUser => {
+  const {userId} =  req.params;
+                                                                            // console.log(`Find user: ${userId} / is hex number: ${userId.match(/^[0-9a-f]+$/)}`);
+  try {
+    if (!userId.match(/^[0-9a-f]+$/)) throw new Error(`Incorrect _id: ${userId}; try another one, please`);
+    User.findById(userId).then(mongUser => {
                                                                             // console.log(`User found: ${mongUser}`);
-    if(!mongUser) return  Promise.reject(`User ${userId} doesn't exist, try another _id`);
-    const {name, about, avatar, _id} = mongUser;
-    const user = { name: name, about: about, avatar: avatar, _id: _id}
+      if(!mongUser) return  Promise.reject(`User ${userId} doesn't exist, try another _id`);
+      const {name, about, avatar, _id} = mongUser;
+      const user = { name: name, about: about, avatar: avatar, _id: _id}
                                                                             // console.log(`User 2 send 4 response: ${Object.entries(user).join('; ')}`);
-    res.send({data: user})
-  }).catch(err => {
-    console.log(`Error ${errNotFound.num}: ${err}`);
-    res.status(errNotFound.num).send({ message: errNotFound.msg })
-  });
+      res.send({data: user})
+      }).catch(err => {
+      console.log(`Error ${errNotFound.num}: ${err}`);
+      res.status(errNotFound.num).send({ message: err});
+    });
+  } catch (err) {
+    console.log(`Error ${errIncorrectData.num}: ${err}`);
+    res.status(errIncorrectData.num).send({ message: err});
+  };
 }
 
 function createUser(req, res) {
