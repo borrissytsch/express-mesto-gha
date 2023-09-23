@@ -1,4 +1,4 @@
-const {PORT, logger} = require('./utils/constants');
+const {PORT, logger, errNotFound} = require('./utils/constants');
 const {MONGODB = "mongodb://127.0.0.1:27017/mestodb"} =  process.env;
 const router = require('./routes/users');
 const cardRouter = require('./routes/cards');
@@ -22,7 +22,14 @@ app.use((req, res, next) => {
 });
 app.use('/', router);
 app.use('/', cardRouter);
-app.use('/*', () => {console.log("Path 2 be processed doesn't exist")})
+app.patch('/*', (req, res) => {
+  try {
+    throw new Error ("Path 2 be processed doesn't exist");
+  } catch (err) {
+    console.log(`Error ${errNotFound.num}: ${err}`);
+    res.status(errNotFound.num).send({ message: err});
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

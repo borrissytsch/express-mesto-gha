@@ -45,7 +45,6 @@ function createUser(req, res) {
 function updateProfile (req, res) {
   const _id = req.user._id;
   User.find({_id}).then(mongUser => {
-    if(!mongUser[0]) return  Promise.reject(`User ${_id} doesn't exist, try another _id`);
     const {name = mongUser[0].name, about = mongUser[0].about, avatar = mongUser[0].avatar} = req.body;
     mongUser[0] = {name: name, about: about, avatar: avatar};
     return mongUser;
@@ -55,8 +54,8 @@ function updateProfile (req, res) {
                                                                             // console.log(`Mongo update res: ${user}`);
     res.send({ data: user })
   }).catch(err => {
-    console.log(`Error ${errNotFound.num}: ${err}`);
-    res.status(errNotFound.num).send({ message: errNotFound.msg })
+    console.log(`Error ${errIncorrectData.num}: ${errIncorrectData.msg}`);
+    res.status(errIncorrectData.num).send({ message: errIncorrectData.msg })
   }));
 }
 
