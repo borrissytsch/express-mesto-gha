@@ -28,8 +28,11 @@ const errIncorrectData = { num: 400
     , msg: "Error occurred"
 }
 
+/* Miscellaneous consts */
+const idPattern4HexFmt = /^[0-9a-f]+$/;
+
 module.exports = { PORT, USERS, CARDS, MONGODB
   , userDirs, cardDirs, userRoutes, cardRoutes, logger
-  , errIncorrectData, errNotFound, errDefault
+  , errIncorrectData, errNotFound, errDefault, idPattern4HexFmt
 }
 

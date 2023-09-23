@@ -1,4 +1,6 @@
-const { CARDS, cardDirs, errIncorrectData, errNotFound, errDefault } = require('../utils/constants');
+const { CARDS, cardDirs
+  , errIncorrectData, errNotFound, errDefault, idPattern4HexFmt
+} = require('../utils/constants');
 const Card = require('../models/card');
 const { id: cardId } = cardDirs;
 
@@ -24,7 +26,7 @@ function createCard(req, res) {
 function deleteCardById(req, res) {
                                                                 // console.log(req.params.cardId);
   try {
-    if (!req.params.cardId.match(/^[0-9a-f]+$/)) throw new Error(`Incorrect _id: ${req.params.cardId}; try another one, please`);
+    if (!req.params.cardId.match(idPattern4HexFmt)) throw new Error(`Incorrect _id: ${req.params.cardId}; try another one, please`);
     Card.findByIdAndRemove(req.params.cardId).then(card => {
                                                                 // console.log(`Deleted card: ${card}`);
       if(!card) return  Promise.reject(`User ${req.params.cardId} doesn't exist, try another _id`);
@@ -42,7 +44,7 @@ function deleteCardById(req, res) {
 function likeCard(req, res) {
                                                                   // console.log(`Card 2 like ${req.params.cardId} 4 user: ${req.user._id}`);
   try {
-    if (!req.params.cardId.match(/^[0-9a-f]+$/)) throw new Error(`Incorrect _id: ${req.params.cardId}; try another one, please`);
+    if (!req.params.cardId.match(idPattern4HexFmt)) throw new Error(`Incorrect _id: ${req.params.cardId}; try another one, please`);
     Card.findByIdAndUpdate(req.params.cardId
       , { $addToSet: { likes: req.user._id } }, { new: true }     // добавить _id в массив, если его там нет
     ).then(card => {
@@ -62,7 +64,7 @@ function likeCard(req, res) {
 function dislikeCard(req, res) {
                                                                 // console.log(`Card 2 dislike ${req.params.cardId} 4 user: ${req.user._id}`);
   try {
-    if (!req.params.cardId.match(/^[0-9a-f]+$/)) throw new Error(`Incorrect _id: ${req.params.cardId}; try another one, please`);
+    if (!req.params.cardId.match(idPattern4HexFmt)) throw new Error(`Incorrect _id: ${req.params.cardId}; try another one, please`);
     Card.findByIdAndUpdate(req.params.cardId
       , { $pull: { likes: req.user._id } }, { new: true }         // убрать _id из массива
     ).then(card => {

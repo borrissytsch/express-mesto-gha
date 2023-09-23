@@ -1,4 +1,6 @@
-const { USERS, userDirs, errIncorrectData, errNotFound , errDefault } = require('../utils/constants');
+const { USERS, userDirs
+  , errIncorrectData, errNotFound , errDefault, idPattern4HexFmt
+} = require('../utils/constants');
 const User = require('../models/user');
 const { id: userId } = userDirs;
 
@@ -11,9 +13,9 @@ function getUsers(req, res) {
 
 function getUserById(req, res) {
   const {userId} =  req.params;
-                                                                            // console.log(`Find user: ${userId} / is hex number: ${userId.match(/^[0-9a-f]+$/)}`);
+                                                                            // console.log(`Find user: ${userId} / is hex number: ${userId.match(idPattern4HexFmt)}`);
   try {
-    if (!userId.match(/^[0-9a-f]+$/)) throw new Error(`Incorrect _id: ${userId}; try another one, please`);
+    if (!userId.match(idPattern4HexFmt)) throw new Error(`Incorrect _id: ${userId}; try another one, please`);
     User.findById(userId).then(mongUser => {
                                                                             // console.log(`User found: ${mongUser}`);
       if(!mongUser) return  Promise.reject(`User ${userId} doesn't exist, try another _id`);
