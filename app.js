@@ -6,10 +6,7 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-mongoose.connect(MONGODB, { useNewUrlParser: true
-  /*, useCreateIndex: true      // these 2 features are not supported on 4.0.27 mongodb
-  , useFindAndModify: false */
-});
+mongoose.connect(MONGODB, { useNewUrlParser: true});
 
 app.use(bodyParser.json());                                 // для собирания JSON-формата
 app.use(bodyParser.urlencoded({ extended: true }));         // для приёма веб-страниц внутри POST-запроса

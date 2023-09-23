@@ -7,8 +7,7 @@ const cardSchema = new mongoose.Schema({
   , link: { type: String
     , required: true
   }
-  , owner: { type: mongoose.Schema.Types.ObjectId //   , required: true
-  }
+  , owner: { type: mongoose.Schema.Types.ObjectId }
   , likes: { type: [mongoose.Schema.Types.ObjectId], default: [] }
   , createdAt : { type: Date, default: Date.now }
 });
