@@ -16,9 +16,9 @@ function getCards(req, res) {
 }
 
 function createCard(req, res) {
-  // console.log(req.body);
+  // console.log(`${req.body} / ${req.user._id}`);
   const {
-    name, link, owner = req.user.id, likes,
+    name, link, owner = req.user._id, likes,
   } = req.body;
   Card.create(
     { name, link, owner, likes }
