@@ -69,9 +69,10 @@ function updateProfile(req, res) {
 function updateAvatar(req, res) {
   const { _id } = req.user;
   User.find({ _id }).then((mongUser) => {
-    const { avatar = mongUser[0].avatar } = req.body;
-    const retUser = { avatar };
-    return retUser;
+    const { avatar } = req.body;
+    /* const retUser = { avatar };
+    return retUser; */
+    return { avatar };
   }).then((upUser) => User.findByIdAndUpdate(
     _id, upUser[0], { new: true, runValidators: true }).then((user) => {
     // console.log(`Mongo update res: ${user}`);
