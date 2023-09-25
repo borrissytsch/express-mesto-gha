@@ -10,9 +10,9 @@ const {
 const { cardId, cardLikes } = cardRoutes;
 
 // cardRouter.get(CARDS, getCards);
-cardRouter.get(getCards);
+cardRouter.get('/', getCards);
 // cardRouter.post(CARDS, createCard);
-cardRouter.post(createCard);
+cardRouter.post('/', createCard);
 cardRouter.delete(cardId, deleteCardById);
 cardRouter.put(cardLikes, likeCard);
 cardRouter.delete(cardLikes, dislikeCard);
