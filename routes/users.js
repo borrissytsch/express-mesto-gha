@@ -6,9 +6,11 @@ const {
 
 const { userId, userProfile, userAvatar } = userRoutes;
 
-userRouter.get(USERS, getUsers);
+// userRouter.get(USERS, getUsers);
+userRouter.get(getUsers);
 userRouter.get(userId, getUserById);
-userRouter.post(USERS, createUser);
+// userRouter.post(USERS, createUser);
+userRouter.post(createUser);
 userRouter.patch(userProfile, updateProfile);
 userRouter.patch(userAvatar, updateAvatar);
 

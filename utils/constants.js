@@ -11,13 +11,18 @@ const {
 const userDirs = { id: 'userId', profile: 'me', avatar: 'avatar' };
 const cardDirs = { id: 'cardId', likes: 'likes' };
 const userRoutes = {
-  userId: `${USERS}/:${userDirs.id}`,
-  userProfile: `${USERS}/${userDirs.profile}`,
-  userAvatar: `${USERS}/${userDirs.profile}/${userDirs.avatar}`,
+  // userId: `${USERS}/:${userDirs.id}`,
+  userId: `/:${userDirs.id}`,
+  // userProfile: `${USERS}/${userDirs.profile}`,
+  userProfile: `/${userDirs.profile}`,
+  // userAvatar: `${USERS}/${userDirs.profile}/${userDirs.avatar}`,
+  userAvatar: `/${userDirs.profile}/${userDirs.avatar}`,
 };
 const cardRoutes = {
-  cardId: `${CARDS}/:${cardDirs.id}`,
-  cardLikes: `${CARDS}/:${cardDirs.id}/${cardDirs.likes}`,
+  // cardId: `${CARDS}/:${cardDirs.id}`,
+  cardId: `/:${cardDirs.id}`,
+  // cardLikes: `${CARDS}/:${cardDirs.id}/${cardDirs.likes}`,
+  cardLikes: `/:${cardDirs.id}/${cardDirs.likes}`,
 };
 /* Router common consts */
 const logger = (req, res, next, logTraceFlag = false, logTraceMsg = 'Request is logged on') => {
