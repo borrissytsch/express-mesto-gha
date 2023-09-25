@@ -52,9 +52,9 @@ function updateProfile(req, res) {
   const { _id } = req.user;
   User.find({ _id }).then((mongUser) => {
     const {
-      name = mongUser[0].name, about = mongUser[0].about,
+      name = mongUser[0].name, about = mongUser[0].about, avatar = mongUser[0].avatar
     } = req.body;
-    const retUser = { name, about };
+    const retUser = { name, about, avatar };
     return retUser;
   }).then((upUser) => User.findByIdAndUpdate(
     _id, upUser[0], { new: true, runValidators: true }).then((user) => {
@@ -69,10 +69,11 @@ function updateProfile(req, res) {
 function updateAvatar(req, res) {
   const { _id } = req.user;
   User.find({ _id }).then((mongUser) => {
-    const { avatar } = req.body;
-    /* const retUser = { avatar };
-    return retUser; */
-    return { avatar };
+    const {
+      name = mongUser[0].name, about = mongUser[0].about, avatar = mongUser[0].avatar
+    } = req.body;
+    const retUser = { name, about, avatar };
+    return retUser;
   }).then((upUser) => User.findByIdAndUpdate(
     _id, upUser[0], { new: true, runValidators: true }).then((user) => {
     // console.log(`Mongo update res: ${user}`);
