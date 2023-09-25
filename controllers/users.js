@@ -27,9 +27,9 @@ function getUserById(req, res) {
       const user = { name, about, avatar, _id };
       // console.log(`User 2 send 4 response: ${Object.entries(user).join('; ')}`);
       res.send({ data: user });
-    }).catch((err) => {
+    }).catch((/* err */) => {
       // console.log(`Error ${errNotFound.num}: ${err}`);
-      res.status(errNotFound.num).send({ message: err });
+      res.status(errNotFound.num).send({ message: errNotFound.msg });
     });
   } catch {
     // console.log(`Error ${errIncorrectData.num}: ${err}`);
@@ -52,7 +52,7 @@ function updateProfile(req, res) {
   const { _id } = req.user;
   User.find({ _id }).then((mongUser) => {
     const {
-      name = mongUser[0].name, about = mongUser[0].about, avatar = mongUser[0].avatar
+      name /*= mongUser[0].name*/, about /*= mongUser[0].about*/, avatar /*= mongUser[0].avatar*/
     } = req.body;
     const retUser = { name, about, avatar };
     return retUser;
@@ -70,7 +70,7 @@ function updateAvatar(req, res) {
   const { _id } = req.user;
   User.find({ _id }).then((mongUser) => {
     const {
-      name = mongUser[0].name, about = mongUser[0].about, avatar = mongUser[0].avatar
+      name /*= mongUser[0].name*/, about /*= mongUser[0].about*/, avatar /*= mongUser[0].avatar*/
     } = req.body;
     const retUser = { name, about, avatar };
     return retUser;
