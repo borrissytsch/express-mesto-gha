@@ -2,7 +2,7 @@ const { MONGODB = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
-const router = require('./routes/users');
+const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const { PORT, logger, errNotFound } = require('./utils/constants');
 
@@ -18,7 +18,7 @@ app.use((req, res, next) => {
   };
   next();
 });
-app.use('/', router);
+app.use('/', userRouter);
 app.use('/', cardRouter);
 app.patch('/*', (req, res) => {
   try {

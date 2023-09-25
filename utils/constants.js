@@ -37,7 +37,6 @@ const errDefault = {
   num: 500,
   msg: 'Error occurred',
 };
-
 /* Miscellaneous consts */
 const idPattern4HexFmt = /^[0-9a-f]+$/;
 
