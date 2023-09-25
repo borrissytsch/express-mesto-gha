@@ -49,10 +49,10 @@ function createUser(req, res) {
 }
 
 function updateProfile(req, res) {
-  const {_id} = req.user;
+  const { _id } = req.user;
   User.find({ _id }).then((mongUser) => {
     const {
-      name = mongUser[0].name, about = mongUser[0].about, avatar = mongUser[0].avatar
+      name = mongUser[0].name, about = mongUser[0].about,
     } = req.body;
     const retUser = { name, about };
     return retUser;
@@ -67,11 +67,9 @@ function updateProfile(req, res) {
 }
 
 function updateAvatar(req, res) {
-  const {_id} = req.user;
+  const { _id } = req.user;
   User.find({ _id }).then((mongUser) => {
-    const {
-      name = mongUser[0].name, about = mongUser[0].about, avatar = mongUser[0].avatar
-    } = req.body;
+    const { avatar = mongUser[0].avatar } = req.body;
     const retUser = { avatar };
     return retUser;
   }).then((upUser) => User.findByIdAndUpdate(
