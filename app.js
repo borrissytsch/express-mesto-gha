@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
-const { PORT, logger, errNotFound } = require('./utils/constants');
+const { PORT, USERS, CARDS, logger, errNotFound } = require('./utils/constants');
 
 const app = express();
 mongoose.connect(MONGODB, { useNewUrlParser: true });
@@ -19,8 +19,8 @@ app.use((req, res, next) => {
   };
   next();
 });
-app.use('/users', userRouter);
-app.use('/cards', cardRouter);
+app.use(USERS, userRouter);
+app.use(CARDS, cardRouter);
 app.patch('/*', (req, res) => {
   try {
     throw new Error("Path 2 be processed doesn't exist");
