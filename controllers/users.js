@@ -54,7 +54,7 @@ function updateProfile(req, res) {
     const {
       name = mongUser[0].name, about = mongUser[0].about, avatar = mongUser[0].avatar
     } = req.body;
-    const retUser = { name, about, avatar };
+    const retUser = { name, about };
     return retUser;
   }).then((upUser) => User.findByIdAndUpdate(
     _id, upUser[0], { new: true, runValidators: true }).then((user) => {
@@ -67,7 +67,21 @@ function updateProfile(req, res) {
 }
 
 function updateAvatar(req, res) {
-  updateProfile(req, res);
+  const {_id} = req.user;
+  User.find({ _id }).then((mongUser) => {
+    const {
+      name = mongUser[0].name, about = mongUser[0].about, avatar = mongUser[0].avatar
+    } = req.body;
+    const retUser = { avatar };
+    return retUser;
+  }).then((upUser) => User.findByIdAndUpdate(
+    _id, upUser[0], { new: true, runValidators: true }).then((user) => {
+    // console.log(`Mongo update res: ${user}`);
+    res.send({ data: user });
+  }).catch((/* err */) => {
+    // console.log(`Error ${errIncorrectData.num}: ${errIncorrectData.msg}`);
+    res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
+  }));
 }
 
 module.exports = { getUsers, getUserById, createUser, updateProfile, updateAvatar };
