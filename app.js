@@ -25,7 +25,7 @@ app.patch('/*', (req, res) => {
   try {
     throw new Error("Path 2 be processed doesn't exist");
   } catch (err) {
-    // console.log(`Error ${errNotFound.num}: ${err}`);
+    console.log(`Error ${errNotFound.num}: ${err}`);
     res.status(errNotFound.num).send({ message: errNotFound.msg });
   }
 });

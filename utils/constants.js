@@ -42,6 +42,7 @@ const errDefault = {
   num: 500,
   msg: 'Error occurred',
 };
+const regPattern4CastError = (str) => /^CastError: /.test(str);
 /* Miscellaneous consts */
 const idPattern4HexFmt = /^[0-9a-f]+$/;
 
@@ -58,5 +59,6 @@ module.exports = {
   errIncorrectData,
   errNotFound,
   errDefault,
+  regPattern4CastError,
   idPattern4HexFmt,
 };
