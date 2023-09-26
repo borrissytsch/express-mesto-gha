@@ -2,8 +2,9 @@ const { MONGODB = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
-const userRouter = require('./routes/users');
-const cardRouter = require('./routes/cards');
+// const userRouter = require('./routes/users');
+// const cardRouter = require('./routes/cards');
+const rootRouter = require('./routes/index');
 const { PORT, USERS, CARDS, logger, errNotFound, logPassLint } = require('./utils/constants');
 
 const app = express();
@@ -19,24 +20,23 @@ app.use((req, res, next) => {
   };
   next();
 });
-app.use(USERS, userRouter);
-app.use(CARDS, cardRouter);
+// app.use(USERS, userRouter);
+app.use(USERS, rootRouter);
+// app.use(CARDS, cardRouter);
+app.use(CARDS, rootRouter);
 app.patch('/*', (req, res) => {
   try {
     throw new Error("Path 2 be processed doesn't exist");
   } catch (err) {
-    // console.log(`Error ${errNotFound.num}: ${err}`);
     logPassLint(`Error ${errNotFound.num}: ${err}`, true);
     res.status(errNotFound.num).send({ message: errNotFound.msg });
   }
 });
 
 app.listen(PORT, () => {
-  // console.log(`App listening on port ${PORT}`);
   logPassLint(`App listening on port ${PORT}`, true);
 });
 
 module.exports.createCard = (req) => {
-  // console.log(req.user._id);
   logPassLint(req.user._id, true);
 };
