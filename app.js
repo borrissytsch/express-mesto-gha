@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
-const { PORT, USERS, CARDS, logger, errNotFound } = require('./utils/constants');
+const { PORT, USERS, CARDS, logger, errNotFound, logPassLint } = require('./utils/constants');
 
 const app = express();
 mongoose.connect(MONGODB, { useNewUrlParser: true });
@@ -25,15 +25,18 @@ app.patch('/*', (req, res) => {
   try {
     throw new Error("Path 2 be processed doesn't exist");
   } catch (err) {
-    console.log(`Error ${errNotFound.num}: ${err}`);
+    // console.log(`Error ${errNotFound.num}: ${err}`);
+    logPassLint(`Error ${errNotFound.num}: ${err}`, true);
     res.status(errNotFound.num).send({ message: errNotFound.msg });
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
+  // console.log(`App listening on port ${PORT}`);
+  logPassLint(`App listening on port ${PORT}`, true);
 });
 
 module.exports.createCard = (req) => {
-  console.log(req.user._id);
+  // console.log(req.user._id);
+  logPassLint(req.user._id, true);
 };

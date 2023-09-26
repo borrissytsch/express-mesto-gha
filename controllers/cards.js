@@ -1,38 +1,42 @@
 const Card = require('../models/card');
 const {
-  errIncorrectData, errNotFound, errDefault, regPattern4CastError, /*idPattern4HexFmt,*/
+  errIncorrectData, errNotFound, errDefault, regPattern4CastErr, regPattern4NonObjErr, logPassLint,
 } = require('../utils/constants');
-
-// const { id: cardId } = cardDirs;
 
 function getCards(req, res) {
   Card.find({}).then((cardList) => {
     // console.log(cardList.join('/ '));
     res.send({ data: cardList });
-  }).catch((/* err */) => {
-    // console.log(err)
+  }).catch((err) => {
+    logPassLint(err, true);
     res.status(errDefault.num).send({ message: errDefault.msg });
   });
 }
 
 function createCard(req, res) {
-  // console.log(`${req.body} / ${req.user._id}`);
+  // logPassLint(`${Object.entries(req.body).join('; ')} / ${req.user._id}`, true)
   const {
     name, link, owner = req.user._id, likes,
   } = req.body;
   Card.create(
     { name, link, owner, likes }
   ).then((card) => {
-    // console.log(`POST response 2 card sent: ${Object.entries({name: card.name, link: card.link,
-    // owner: card.owner, likes: card.likes, _id: card._id}).join('; ')}`);
+    logPassLint(`POST response 2 card sent: ${Object.entries({name: card.name,
+      link: card.link, owner: card.owner, likes: card.likes, _id: card._id}).join('; ')}`, true
+    );
     res.send({
       data: {
         name: card.name, link: card.link, owner: card.owner, likes: card.likes, _id: card._id,
       },
     });
-  }).catch(() => {
-    // console.log(`Error ${errIncorrectData.num}: ${errIncorrectData.msg}`);
-    res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
+  }).catch((err) => {
+    if (regPattern4NonObjErr(err)) {
+      logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
+      res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
+    } else {
+      logPassLint(`Error ${errDefault.num}: ${err}`, true);
+      res.status(errDefault.num).send({ message: errDefault.msg });
+    }
   });
 }
 
@@ -45,11 +49,11 @@ function deleteCardById(req, res) {
       if (!card) return Promise.reject(new Error(`User ${req.params.cardId} doesn't exist, try another _id`));
       res.send({ data: card });
     }).catch((err) => {
-      if (regPattern4CastError(err)) {
-        console.log(`Error ${errIncorrectData.num}: ${err}`);
+      if (regPattern4CastErr(err)) {
+        logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
         res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
       } else {
-        // console.log(`Error ${errNotFound.num}: ${err}`);
+        logPassLint(`Error ${errNotFound.num}: ${err}`, true);
         res.status(errNotFound.num).send({ message: errNotFound.msg });
       }
     });
@@ -70,11 +74,11 @@ function likeCard(req, res) {
       // console.log(`Liked card: ${card}`);
       res.send({ data: card });
     }).catch((err) => {
-      if (regPattern4CastError(err)) {
-        console.log(`Error ${errIncorrectData.num}: ${err}`);
+      if (regPattern4CastErr(err)) {
+        logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
         res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
       } else {
-        console.log(`Error ${errNotFound.num}: ${err}`);
+        logPassLint(`Error ${errNotFound.num}: ${err}`, true);
         res.status(errNotFound.num).send({ message: errNotFound.msg });
       }
     });
@@ -94,11 +98,11 @@ function dislikeCard(req, res) {
       // console.log(`Disliked card: ${card}`);
       res.send({ data: card });
     }).catch((err) => {
-      if (regPattern4CastError(err)) {
-        console.log(`Error ${errIncorrectData.num}: ${err}`);
+      if (regPattern4CastErr(err)) {
+        logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
         res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
       } else {
-        // console.log(`Error ${errNotFound.num}: ${err}`);
+        logPassLint(`Error ${errNotFound.num}: ${err}`, true);
         res.status(errNotFound.num).send({ message: errNotFound.msg });
       }
     });

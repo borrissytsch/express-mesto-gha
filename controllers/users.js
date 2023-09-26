@@ -2,16 +2,17 @@ const mongoose = require('../app');
 const User = require('../models/user');
 
 const {
-  errIncorrectData, errNotFound, /*idPattern4HexFmt, */regPattern4CastError
+  errIncorrectData, errNotFound, errDefault, regPattern4NonObjErr, regPattern4CastErr, logPassLint,
 } = require('../utils/constants');
 // const { id: userId } = userDirs;
 
 function getUsers(req, res) {
   User.find({}).then((userList) => {
-    console.log(userList.join('/ '));
+    // console.log(userList.join('/ '));
     res.send({ data: userList });
   }).catch((err) => {
-    console.log(err);
+    // console.log(err);
+    logPassLint(err, true)
     res.status(errDefault.num).send({ message: err });
   });
 }
@@ -29,11 +30,13 @@ function getUserById(req, res) {
       // console.log(`User 2 send 4 response: ${Object.entries(user).join('; ')}`);
       res.send({ data: user });
     }).catch((err) => {
-      if(regPattern4CastError(err)) {
-        console.log(`Error ${errIncorrectData.num}: ${err}`);
+      if(regPattern4CastErr(err)) {
+        // console.log(`Error ${errIncorrectData.num}: ${err}`);
+        logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
         res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
       } else {
-        console.log(`Error ${errNotFound.num}: ${err}`);
+        // console.log(`Error ${errNotFound.num}: ${err}`);
+        logPassLint(`Error ${errNotFound.num}: ${err}`, true);
         res.status(errNotFound.num).send({ message: errNotFound.msg });
       }
     });
@@ -48,9 +51,16 @@ function createUser(req, res) {
   User.create({ name, about, avatar }).then((user) => {
     // console.log(`POST response sent:  ${user}`)
     res.send({ data: user });
-  }).catch(() => {
-    // console.log(`Error ${errIncorrectData.num}: ${errIncorrectData.msg}`);
-    res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
+  }).catch((err) => {
+    if(regPattern4NonObjErr(err)) {
+      // console.log(`Error ${errIncorrectData.num}: ${err}`);
+      logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
+      res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
+    } else {
+      // console.log(`Error ${errDefault.num}: ${errDefault.msg}`);
+      logPassLint(`Error ${errDefault.num}: ${err}`, true);
+      res.status(errDefault.num).send({ message: errDefault.msg });
+    }
   });
 }
 
@@ -66,9 +76,16 @@ function updateProfile(req, res) {
     _id, upUser, { new: true, runValidators: true }).then((user) => {
     // console.log(`Mongo update res: ${user}`);
     res.send({ data: user });
-  }).catch((/* err */) => {
-    // console.log(`Error ${errIncorrectData.num}: ${errIncorrectData.msg} ${err}`);
-    res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
+  }).catch((err) => {
+    if(regPattern4NonObjErr(err)) {
+      // console.log(`Error ${errIncorrectData.num}: ${err}`);
+      logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
+      res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
+    } else {
+      // console.log(`Error ${errDefault.num}: ${errDefault.msg}`);
+      logPassLint(`Error ${errDefault.num}: ${err}`, true);
+      res.status(errDefault.num).send({ message: errDefault.msg });
+    }
   }));
 }
 
@@ -84,9 +101,16 @@ function updateAvatar(req, res) {
     _id, upUser, { new: true, runValidators: true }).then((user) => {
     // console.log(`Mongo update res: ${user}`);
     res.send({ data: user });
-  }).catch((/* err */) => {
-    // console.log(`Error ${errIncorrectData.num}: ${errIncorrectData.msg} ${err}`);
-    res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
+  }).catch((err) => {
+    if(regPattern4NonObjErr(err)) {
+      // console.log(`Error ${errIncorrectData.num}: ${err}`);
+      logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
+      res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
+    } else {
+      // console.log(`Error ${errDefault.num}: ${errDefault.msg}`);
+      logPassLint(`Error ${errDefault.num}: ${err}`, true);
+      res.status(errDefault.num).send({ message: errDefault.msg });
+    }
   }));
 }
 

@@ -42,9 +42,14 @@ const errDefault = {
   num: 500,
   msg: 'Error occurred',
 };
-const regPattern4CastError = (str) => /^CastError: /.test(str);
+const regPattern4CastErr = (str) => /^CastError: /.test(str);
+const regPattern4NonObjErr = (str, regPattern = /^ValidationError: /) => regPattern.test(str);
 /* Miscellaneous consts */
 const idPattern4HexFmt = /^[0-9a-f]+$/;
+const logPassLint = (msg, logFlag = false, msgLog = (msg = msg, logFlag = logFlag,
+  logAlert = logAlert) => {if (logFlag) console.log(msg); if (logAlert) Alert(msg)},
+  logAlert = false) => msgLog(msg, logFlag, logAlert
+);
 
 module.exports = {
   PORT,
@@ -59,6 +64,8 @@ module.exports = {
   errIncorrectData,
   errNotFound,
   errDefault,
-  regPattern4CastError,
+  regPattern4CastErr,
+  regPattern4NonObjErr,
   idPattern4HexFmt,
+  logPassLint,
 };
