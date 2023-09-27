@@ -68,8 +68,6 @@ module.exports = {
   errIncorrectData,
   errNotFound,
   errDefault,
-/*  regPattern4CastErr,
-regPattern4NonObjErr,*/
   errCastError,
   errValidationError,
   idPattern4HexFmt,
