@@ -1,6 +1,6 @@
 const Card = require('../models/card');
 const {
-  errIncorrectData, errNotFound, errDefault, /*regPattern4CastErr, regPattern4NonObjErr,*/ errCastError, errValidationError, logPassLint,
+  errIncorrectData, errNotFound, errDefault, errCastError, errValidationError, logPassLint,
 } = require('../utils/constants');
 
 function getCards(req, res) {

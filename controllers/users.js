@@ -2,7 +2,7 @@
 const User = require('../models/user');
 
 const {
-  errIncorrectData, errNotFound, errDefault, errValidationError, /*regPattern4NonObjErr, regPattern4CastErr, */ errCastError, logPassLint,
+  errIncorrectData, errNotFound, errDefault, errValidationError, errCastError, logPassLint,
 } = require('../utils/constants');
 
 function getUsers(req, res) {
@@ -59,9 +59,9 @@ function updateProfile(req, res) {
   const { _id } = req.user;
   User.find({ _id }).then((mongUser) => {
     const {
-      name = mongUser[0].name, about = mongUser[0].about, avatar = mongUser[0].avatar,
+      name = mongUser[0].name, about = mongUser[0].about, // , avatar = mongUser[0].avatar,
     } = req.body;
-    const retUser = { name, about/*, avatar */};
+    const retUser = { name, about }; // , avatar
     return retUser;
   }).then((upUser) => User.findByIdAndUpdate(
     _id,
@@ -85,9 +85,9 @@ function updateAvatar(req, res) {
   const { _id } = req.user;
   User.find({ _id }).then((mongUser) => {
     const {
-      name = mongUser[0].name, about = mongUser[0].about, avatar = mongUser[0].avatar,
+      avatar = mongUser[0].avatar, /* name = mongUser[0].name, about = mongUser[0].about,  */
     } = req.body;
-    const retUser = {/* name, about,*/ avatar };
+    const retUser = { avatar }; /* name, about, */
     return retUser;
   }).then((upUser) => User.findByIdAndUpdate(
     _id,
