@@ -2,10 +2,11 @@ const { MONGODB = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
-// const userRouter = require('./routes/users');
-// const cardRouter = require('./routes/cards');
-const rootRouter = require('./routes/index');
-const { PORT, USERS, CARDS, logger, errNotFound, logPassLint } = require('./utils/constants');
+const userRouter = require('./routes/users');
+const cardRouter = require('./routes/cards');
+const {
+  PORT, USERS, CARDS, logger, errNotFound, logPassLint,
+} = require('./utils/constants');
 
 const app = express();
 mongoose.connect(MONGODB, { useNewUrlParser: true });
@@ -20,10 +21,8 @@ app.use((req, res, next) => {
   };
   next();
 });
-// app.use(USERS, userRouter);
-app.use(USERS, rootRouter);
-// app.use(CARDS, cardRouter);
-app.use(CARDS, rootRouter);
+app.use(USERS, userRouter);
+app.use(CARDS, cardRouter);
 app.patch('/*', (req, res) => {
   try {
     throw new Error("Path 2 be processed doesn't exist");

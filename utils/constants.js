@@ -24,11 +24,7 @@ const cardRoutes = {
   // cardLikes: `${CARDS}/:${cardDirs.id}/${cardDirs.likes}`,
   cardLikes: `/:${cardDirs.id}/${cardDirs.likes}`,
 };
-/* Router common consts */
-const logger = (req, res, next, logTraceFlag = false, logTraceMsg = 'Request is logged on') => {
-  if (logTraceFlag) console.log(logTraceMsg);
-  next();
-};
+
 /* Error processing config consts */
 const errIncorrectData = {
   num: 400,
@@ -46,10 +42,16 @@ const regPattern4CastErr = (str) => /^CastError: /.test(str);
 const regPattern4NonObjErr = (str, regPattern = /^ValidationError: /) => regPattern.test(str);
 /* Miscellaneous consts */
 const idPattern4HexFmt = /^[0-9a-f]+$/;
-const logPassLint = (msg, logFlag = false, msgLog = (msg = msg, logFlag = logFlag,
-  logAlert = logAlert) => {if (logFlag) console.log(msg); if (logAlert) Alert(msg)},
-  logAlert = false) => msgLog(msg, logFlag, logAlert
-);
+const logPassLint = (
+  msg,
+  logFlag = false,
+  msgLog = (msg2Log = msg, log2Flag = logFlag) => { if (log2Flag) console.log(msg2Log); },
+) => msgLog(msg, logFlag);
+/* Router common consts */
+const logger = (req, res, next, logTraceFlag = false, logTraceMsg = 'Request is logged on') => {
+  if (logTraceFlag) logPassLint(logTraceMsg, true);
+  next();
+};
 
 module.exports = {
   PORT,
