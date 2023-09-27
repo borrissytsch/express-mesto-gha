@@ -2,7 +2,7 @@
 const User = require('../models/user');
 
 const {
-  errIncorrectData, errNotFound, errDefault, regPattern4NonObjErr, regPattern4CastErr, logPassLint,
+  errIncorrectData, errNotFound, errDefault, errValidationError, /*regPattern4NonObjErr, regPattern4CastErr, */ errCastError, logPassLint,
 } = require('../utils/constants');
 
 function getUsers(req, res) {
@@ -27,7 +27,9 @@ function getUserById(req, res) {
     // console.log(`User 2 send 4 response: ${Object.entries(user).join('; ')}`);
     return res.send({ data: user });
   }).catch((err) => {
-    if (regPattern4CastErr(err)) {
+    // console.dir(err.name);
+    // if (regPattern4CastErr(err)) {
+    if (err.name === errCastError) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
       res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
     } else {
@@ -42,7 +44,8 @@ function createUser(req, res) {
   User.create({ name, about, avatar }).then((user) => {
     res.send({ data: user });
   }).catch((err) => {
-    if (regPattern4NonObjErr(err)) {
+    // if (regPattern4NonObjErr(err)) {
+    if (err.name === errValidationError) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
       res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
     } else {
@@ -58,7 +61,7 @@ function updateProfile(req, res) {
     const {
       name = mongUser[0].name, about = mongUser[0].about, avatar = mongUser[0].avatar,
     } = req.body;
-    const retUser = { name, about, avatar };
+    const retUser = { name, about/*, avatar */};
     return retUser;
   }).then((upUser) => User.findByIdAndUpdate(
     _id,
@@ -67,7 +70,8 @@ function updateProfile(req, res) {
   ).then((user) => {
     res.send({ data: user });
   }).catch((err) => {
-    if (regPattern4NonObjErr(err)) {
+    // if (regPattern4NonObjErr(err)) {
+    if (err.name === errValidationError) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
       res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
     } else {
@@ -83,7 +87,7 @@ function updateAvatar(req, res) {
     const {
       name = mongUser[0].name, about = mongUser[0].about, avatar = mongUser[0].avatar,
     } = req.body;
-    const retUser = { name, about, avatar };
+    const retUser = {/* name, about,*/ avatar };
     return retUser;
   }).then((upUser) => User.findByIdAndUpdate(
     _id,
@@ -92,7 +96,8 @@ function updateAvatar(req, res) {
   ).then((user) => {
     res.send({ data: user });
   }).catch((err) => {
-    if (regPattern4NonObjErr(err)) {
+    // if (regPattern4NonObjErr(err)) {
+    if (err.name === errValidationError) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
       res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
     } else {

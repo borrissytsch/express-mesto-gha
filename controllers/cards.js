@@ -1,6 +1,6 @@
 const Card = require('../models/card');
 const {
-  errIncorrectData, errNotFound, errDefault, regPattern4CastErr, regPattern4NonObjErr, logPassLint,
+  errIncorrectData, errNotFound, errDefault, /*regPattern4CastErr, regPattern4NonObjErr,*/ errCastError, errValidationError, logPassLint,
 } = require('../utils/constants');
 
 function getCards(req, res) {
@@ -33,7 +33,8 @@ function createCard(req, res) {
       },
     });
   }).catch((err) => {
-    if (regPattern4NonObjErr(err)) {
+    // if (regPattern4NonObjErr(err)) {
+    if (err.name === errValidationError) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
       res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
     } else {
@@ -48,7 +49,8 @@ function deleteCardById(req, res) {
     if (!card) return Promise.reject(new Error(`User ${req.params.cardId} doesn't exist, try another _id`));
     return res.send({ data: card });
   }).catch((err) => {
-    if (regPattern4CastErr(err)) {
+    // if (regPattern4CastErr(err)) {
+    if (err.name === errCastError) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
       res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
     } else {
@@ -68,7 +70,8 @@ function likeCard(req, res) {
     if (!card) return Promise.reject(new Error(`User ${req.params.cardId} doesn't exist, try another _id`));
     return res.send({ data: card });
   }).catch((err) => {
-    if (regPattern4CastErr(err)) {
+    // if (regPattern4CastErr(err)) {
+    if (err.name === errCastError) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
       res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
     } else {
@@ -88,7 +91,8 @@ function dislikeCard(req, res) {
     if (!card) return Promise.reject(new Error(`User ${req.params.cardId} doesn't exist, try another _id`));
     return res.send({ data: card });
   }).catch((err) => {
-    if (regPattern4CastErr(err)) {
+    // if (regPattern4CastErr(err)) {
+    if (err.name === errCastError) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
       res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
     } else {

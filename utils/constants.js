@@ -38,8 +38,10 @@ const errDefault = {
   num: 500,
   msg: 'Error occurred',
 };
-const regPattern4CastErr = (str) => /^CastError: /.test(str);
-const regPattern4NonObjErr = (str, regPattern = /^ValidationError: /) => regPattern.test(str);
+// const regPattern4CastErr = (str) => /^CastError: /.test(str);
+// const regPattern4NonObjErr = (str, regPattern = /^ValidationError: /) => regPattern.test(str);
+const errCastError = 'CastError';
+const errValidationError = 'ValidationError';
 /* Miscellaneous consts */
 const idPattern4HexFmt = /^[0-9a-f]+$/;
 const logPassLint = (
@@ -66,8 +68,10 @@ module.exports = {
   errIncorrectData,
   errNotFound,
   errDefault,
-  regPattern4CastErr,
-  regPattern4NonObjErr,
+/*  regPattern4CastErr,
+regPattern4NonObjErr,*/
+  errCastError,
+  errValidationError,
   idPattern4HexFmt,
   logPassLint,
 };
