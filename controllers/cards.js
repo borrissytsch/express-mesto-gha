@@ -46,7 +46,7 @@ function createCard(req, res) {
 function deleteCardById(req, res) {
   Card.findByIdAndRemove(req.params.cardId).then((card) => {
     if (!card) return Promise.reject(new Error(`User ${req.params.cardId} doesn't exist, try another _id`));
-    res.send({ data: card });
+    return res.send({ data: card });
   }).catch((err) => {
     if (regPattern4CastErr(err)) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
@@ -66,7 +66,7 @@ function likeCard(req, res) {
     { new: true },
   ).then((card) => {
     if (!card) return Promise.reject(new Error(`User ${req.params.cardId} doesn't exist, try another _id`));
-    res.send({ data: card });
+    return res.send({ data: card });
   }).catch((err) => {
     if (regPattern4CastErr(err)) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
@@ -86,7 +86,7 @@ function dislikeCard(req, res) {
     { new: true },
   ).then((card) => {
     if (!card) return Promise.reject(new Error(`User ${req.params.cardId} doesn't exist, try another _id`));
-    res.send({ data: card });
+    return res.send({ data: card });
   }).catch((err) => {
     if (regPattern4CastErr(err)) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);

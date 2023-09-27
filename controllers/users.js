@@ -25,7 +25,7 @@ function getUserById(req, res) {
       name, about, avatar, _id,
     };
     // console.log(`User 2 send 4 response: ${Object.entries(user).join('; ')}`);
-    res.send({ data: user });
+    return res.send({ data: user });
   }).catch((err) => {
     if (regPattern4CastErr(err)) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
