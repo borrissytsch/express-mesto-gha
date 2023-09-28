@@ -1,8 +1,7 @@
-// const mongoose = require('../app');
 const User = require('../models/user');
 
 const {
-  errIncorrectData, errNotFound, errDefault, errValidationError, errCastError, logPassLint,
+  errIncorrectData, errNotFound, errDefault, errValidationErr, errCastErr, errName, logPassLint,
 } = require('../utils/constants');
 
 function getUsers(req, res) {
@@ -14,10 +13,11 @@ function getUsers(req, res) {
   });
 }
 
+// if (!mongUser) return Promise.reject(new Error(`User ${userId} doesn't exist, try another _id`))
 function getUserById(req, res) {
   const { userId } = req.params;
   User.findById(userId).then((mongUser) => {
-    if (!mongUser) return Promise.reject(new Error(`User ${userId} doesn't exist, try another _id`));
+    if (!mongUser) return Promise.reject(new Error(errNotFound.msg));
     const {
       name, about, avatar, _id,
     } = mongUser;
@@ -27,14 +27,15 @@ function getUserById(req, res) {
     // console.log(`User 2 send 4 response: ${Object.entries(user).join('; ')}`);
     return res.send({ data: user });
   }).catch((err) => {
-    // console.dir(err.name);
-    // if (regPattern4CastErr(err)) {
-    if (err.name === errCastError) {
+    if (err.name === errCastErr) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
       res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
-    } else {
+    } else if (err.name === errName && err.message === errNotFound.msg) {
       logPassLint(`Error ${errNotFound.num}: ${err}`, true);
       res.status(errNotFound.num).send({ message: errNotFound.msg });
+    } else {
+      logPassLint(err, true);
+      res.status(errDefault.num).send({ message: err });
     }
   });
 }
@@ -44,8 +45,7 @@ function createUser(req, res) {
   User.create({ name, about, avatar }).then((user) => {
     res.send({ data: user });
   }).catch((err) => {
-    // if (regPattern4NonObjErr(err)) {
-    if (err.name === errValidationError) {
+    if (err.name === errValidationErr) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
       res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
     } else {
@@ -59,7 +59,7 @@ function updateProfile(req, res) {
   const { _id } = req.user;
   User.find({ _id }).then((mongUser) => {
     const {
-      name = mongUser[0].name, about = mongUser[0].about, // , avatar = mongUser[0].avatar,
+      name = mongUser[0].name, about = mongUser[0].about,
     } = req.body;
     const retUser = { name, about }; // , avatar
     return retUser;
@@ -70,8 +70,7 @@ function updateProfile(req, res) {
   ).then((user) => {
     res.send({ data: user });
   }).catch((err) => {
-    // if (regPattern4NonObjErr(err)) {
-    if (err.name === errValidationError) {
+    if (err.name === errValidationErr) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
       res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
     } else {
@@ -85,9 +84,9 @@ function updateAvatar(req, res) {
   const { _id } = req.user;
   User.find({ _id }).then((mongUser) => {
     const {
-      avatar = mongUser[0].avatar, /* name = mongUser[0].name, about = mongUser[0].about,  */
+      avatar = mongUser[0].avatar,
     } = req.body;
-    const retUser = { avatar }; /* name, about, */
+    const retUser = { avatar };
     return retUser;
   }).then((upUser) => User.findByIdAndUpdate(
     _id,
@@ -96,8 +95,7 @@ function updateAvatar(req, res) {
   ).then((user) => {
     res.send({ data: user });
   }).catch((err) => {
-    // if (regPattern4NonObjErr(err)) {
-    if (err.name === errValidationError) {
+    if (err.name === errValidationErr) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
       res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
     } else {

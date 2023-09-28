@@ -1,6 +1,6 @@
 const Card = require('../models/card');
 const {
-  errIncorrectData, errNotFound, errDefault, errCastError, errValidationError, logPassLint,
+  errIncorrectData, errNotFound, errDefault, errCastErr, errValidationErr, errName, logPassLint,
 } = require('../utils/constants');
 
 function getCards(req, res) {
@@ -33,8 +33,7 @@ function createCard(req, res) {
       },
     });
   }).catch((err) => {
-    // if (regPattern4NonObjErr(err)) {
-    if (err.name === errValidationError) {
+    if (err.name === errValidationErr) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
       res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
     } else {
@@ -44,19 +43,25 @@ function createCard(req, res) {
   });
 }
 
+function processIdSearchErr(req, res, err) {
+  if (err.name === errCastErr) {
+    logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
+    res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
+  } else if (err.name === errName && err.message === errNotFound.msg) {
+    logPassLint(`Error ${errNotFound.num}: ${err}`, true);
+    res.status(errNotFound.num).send({ message: errNotFound.msg });
+  } else {
+    logPassLint(err, true);
+    res.status(errDefault.num).send({ message: err });
+  }
+}
+
 function deleteCardById(req, res) {
   Card.findByIdAndRemove(req.params.cardId).then((card) => {
-    if (!card) return Promise.reject(new Error(`User ${req.params.cardId} doesn't exist, try another _id`));
+    if (!card) return Promise.reject(new Error(errNotFound.msg));
     return res.send({ data: card });
   }).catch((err) => {
-    // if (regPattern4CastErr(err)) {
-    if (err.name === errCastError) {
-      logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
-      res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
-    } else {
-      logPassLint(`Error ${errNotFound.num}: ${err}`, true);
-      res.status(errNotFound.num).send({ message: errNotFound.msg });
-    }
+    processIdSearchErr(req, res, err);
   });
 }
 
@@ -67,17 +72,10 @@ function likeCard(req, res) {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   ).then((card) => {
-    if (!card) return Promise.reject(new Error(`User ${req.params.cardId} doesn't exist, try another _id`));
+    if (!card) return Promise.reject(new Error(errNotFound.msg));
     return res.send({ data: card });
   }).catch((err) => {
-    // if (regPattern4CastErr(err)) {
-    if (err.name === errCastError) {
-      logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
-      res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
-    } else {
-      logPassLint(`Error ${errNotFound.num}: ${err}`, true);
-      res.status(errNotFound.num).send({ message: errNotFound.msg });
-    }
+    processIdSearchErr(req, res, err);
   });
 }
 
@@ -88,17 +86,10 @@ function dislikeCard(req, res) {
     { $pull: { likes: req.user._id } },
     { new: true },
   ).then((card) => {
-    if (!card) return Promise.reject(new Error(`User ${req.params.cardId} doesn't exist, try another _id`));
+    if (!card) return Promise.reject(new Error(errNotFound.msg));
     return res.send({ data: card });
   }).catch((err) => {
-    // if (regPattern4CastErr(err)) {
-    if (err.name === errCastError) {
-      logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
-      res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
-    } else {
-      logPassLint(`Error ${errNotFound.num}: ${err}`, true);
-      res.status(errNotFound.num).send({ message: errNotFound.msg });
-    }
+    processIdSearchErr(req, res, err);
   });
 }
 
