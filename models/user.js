@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const { usrName, usrAbout, usrAvatar, usrEmailFailMsg, errAuth } = require('../utils/constants');
+const {
+  usrName, usrAbout, usrAvatar, usrEmailFailMsg, errAuth, /* errIncorrectData, logPassLint, */
+} = require('../utils/constants');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -36,7 +38,8 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-userSchema.statics.findUserByCredentials = function(email, password) { // should't be an arrow func
+userSchema.statics.findUserByCredentials = function (email, password) { // should't be an arrow fn
+  // console.log(`User credentials starts: ${email} & ${password}`);
   return this.findOne({ email }).select('+password') // this — это модель User
     .then((user) => {
       if (!user) {

@@ -78,12 +78,11 @@ function createUser(req, res) {
   const {
     name, about, avatar, email,
   } = req.body;
-  bcrypt.hash(req.body.password, pswSoltLen).then((password) => {
-    User.create({
-      name, about, avatar, email, password,
-    }).then((user) => {
-      res.send({ data: user });
-    });
+  // console.log(`Create user starts: ${Object.entries(req.body).join(' / ')}`);
+  bcrypt.hash(req.body.password, pswSoltLen).then((password) => User.create({
+    name, about, avatar, email, password,
+  })).then((user) => {
+    res.send({ data: user });
   }).catch((err) => {
     if (err.name === errValidationErr) {
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
