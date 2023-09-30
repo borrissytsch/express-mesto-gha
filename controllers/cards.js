@@ -57,12 +57,20 @@ function processIdSearchErr(req, res, err) {
 }
 
 function deleteCardById(req, res) {
-  Card.findByIdAndRemove(req.params.cardId).then((card) => {
-    if (!card) return Promise.reject(new Error(errNotFound.msg));
-    return res.send({ data: card });
-  }).catch((err) => {
-    processIdSearchErr(req, res, err);
-  });
+  const { cardId, owner } = req.params;
+  try {
+    if (owner !== req.user._id) throw new Error('Only card owner can delete a card');
+    // Card.findByIdAndRemove(req.params.cardId).then((card) => {
+    Card.findByIdAndRemove(cardId).then((card) => {
+      if (!card) return Promise.reject(new Error(errNotFound.msg));
+      return res.send({ data: card });
+    }).catch((err) => {
+      processIdSearchErr(req, res, err);
+    });
+  } catch (err) {
+    logPassLint(err, true);
+    res.status(errDefault.num).send({ message: err });
+  }
 }
 
 function likeCard(req, res) {
