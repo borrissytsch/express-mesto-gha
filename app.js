@@ -4,11 +4,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const auth = require('./middlewares/auth');
+const errHandle = require('./middlewares/errHandle');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const {
-  PORT, USERS, CARDS, logger, errNotFound, logPassLint,
+  PORT, USERS, CARDS, /* logger, */errNotFound, // logPassLint,
 } = require('./utils/constants');
+const { logger, logPassLint } = require('./utils/miscutils');
 const { login, createUser } = require('./controllers/users');
 
 const app = express();
@@ -28,7 +30,7 @@ app.post('/signin', login);
 app.post('/signup', createUser);
 
 // роуты, которым нужна авторизация:
-app.use(auth);
+// app.use(auth);
 app.use(USERS, userRouter);
 app.use(CARDS, cardRouter);
 app.patch('/*', (req, res) => {
@@ -40,6 +42,7 @@ app.patch('/*', (req, res) => {
   }
 });
 
+app.use(errHandle);
 app.listen(PORT, () => {
   logPassLint(`App listening on port ${PORT}`, true);
 });

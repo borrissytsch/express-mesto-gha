@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const {
-  usrName, usrAbout, usrAvatar, usrEmailFailMsg, errAuth, /* errIncorrectData, logPassLint, */
+  usrName, usrAbout, usrAvatar, usrEmailFailMsg, errAuth, usrLinkFailMsg, /* logPassLint, */
 } = require('../utils/constants');
 
 const userSchema = new mongoose.Schema({
@@ -21,9 +21,16 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     default: usrAvatar,
+    validate: {
+      validator(lnk) {
+        return validator.isURL(lnk);
+      },
+      message: usrLinkFailMsg,
+    },
   },
   email: {
     type: String,
+    required: true,
     unique: true,
     validate: {
       validator(val) {
@@ -34,6 +41,7 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
+    required: true,
     select: false,
   },
 });
@@ -46,9 +54,11 @@ userSchema.statics.findUserByCredentials = function (email, password) { // shoul
         return Promise.reject(new Error(errAuth.msg));
       }
       return bcrypt.compare(password, user.password).then((matched) => {
+        // console.log(`Matched: ${matched}`);
         if (!matched) {
           return Promise.reject(new Error(errAuth.msg));
         }
+        console.log(`User 2 return: ${user} / ${password} / ${user.password}`);
         return user;
       });
     });

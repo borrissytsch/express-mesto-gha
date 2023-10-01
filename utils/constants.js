@@ -32,6 +32,7 @@ const usrName = 'Жак-Ив Кусто';
 const usrAbout = 'Исследователь';
 const usrAvatar = 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png';
 const usrEmailFailMsg = 'Field typed is not a valid e-mail address';
+const usrLinkFailMsg = 'Incorrect link address';
 
 /* User auth config consts */
 const id4TokenUser = 'd285e3dceed844f902650f40';
@@ -42,35 +43,47 @@ const authNeedMsg = 'Необходима авторизация';
 /* Error processing config consts */
 const errIncorrectData = {
   num: 400,
+  name: 'Incorrect data',
   msg: 'Incorrect data were sent to card/user create or profile/avatar update methods',
 };
 const errAuth = {
   num: 401,
+  name: 'Authentification failed',
   msg: 'Неправильные почта или пароль',
 };
 const errNotFound = {
   num: 404,
+  name: 'Not found',
   msg: 'Card/user not found',
+};
+const errEmailExists = {
+  num: 409,
+  name: 'Email already exists',
+  msg: 'E-mail already exists, try another one',
 };
 const errDefault = {
   num: 500,
-  msg: 'Error occurred',
+  name: 'Server error',
+  msg: 'Internal server error',
 };
 const errCastErr = 'CastError';
 const errValidationErr = 'ValidationError';
+const errMongoServerError = 'MongoServerError';
 const errName = 'Error';
+const errIllegalArgsPattern = /^Illegal arguments: /;
+const errDuplicateKeyPattern = /^E11000 duplicate key error collection: /;
 /* Miscellaneous consts */
 const pswSoltLen = 12;
-const logPassLint = (
+/* const logPassLint = (
   msg,
   logFlag = false,
   msgLog = (msg2Log = msg, log2Flag = logFlag) => { if (log2Flag) console.log(msg2Log); },
 ) => msgLog(msg, logFlag);
-/* Router common consts */
+/* Router common consts */ /*
 const logger = (req, res, next, logTraceFlag = false, logTraceMsg = 'Request is logged on') => {
   if (logTraceFlag) logPassLint(logTraceMsg, true);
   next();
-};
+}; */
 
 module.exports = {
   PORT,
@@ -87,19 +100,24 @@ module.exports = {
   usrAbout,
   usrAvatar,
   usrEmailFailMsg,
+  usrLinkFailMsg,
   TOKEN_KEY,
   id4TokenUser,
   tokenDuration,
   authHeaderPattern,
   authNeedMsg,
-  logger,
+  // logger,
   errIncorrectData,
   errAuth,
   errNotFound,
+  errEmailExists,
   errDefault,
   errCastErr,
   errValidationErr,
+  errMongoServerError,
   errName,
-  logPassLint,
+  errIllegalArgsPattern,
+  errDuplicateKeyPattern,
+  // logPassLint,
   pswSoltLen,
 };

@@ -1,7 +1,8 @@
 const Card = require('../models/card');
 const {
-  errIncorrectData, errNotFound, errDefault, errCastErr, errValidationErr, errName, logPassLint,
+  errIncorrectData, errNotFound, errDefault, /* errCastErr, */ errValidationErr, // errName,
 } = require('../utils/constants');
+const { logPassLint, handleIdErr } = require('../utils/miscutils');
 
 function getCards(req, res) {
   Card.find({}).then((cardList) => {
@@ -43,7 +44,7 @@ function createCard(req, res) {
   });
 }
 
-function processIdSearchErr(req, res, err) {
+/* function handleIdErr(req, res, err) {
   if (err.name === errCastErr) {
     logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
     res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
@@ -54,7 +55,7 @@ function processIdSearchErr(req, res, err) {
     logPassLint(err, true);
     res.status(errDefault.num).send({ message: err });
   }
-}
+} */
 
 function deleteCardById(req, res) {
   const { cardId, owner } = req.params;
@@ -65,7 +66,8 @@ function deleteCardById(req, res) {
       if (!card) return Promise.reject(new Error(errNotFound.msg));
       return res.send({ data: card });
     }).catch((err) => {
-      processIdSearchErr(req, res, err);
+      // handleIdErr(req, res, err);
+      handleIdErr(res, err);
     });
   } catch (err) {
     logPassLint(err, true);
@@ -83,7 +85,8 @@ function likeCard(req, res) {
     if (!card) return Promise.reject(new Error(errNotFound.msg));
     return res.send({ data: card });
   }).catch((err) => {
-    processIdSearchErr(req, res, err);
+    // handleIdErr(req, res, err);
+    handleIdErr(res, err);
   });
 }
 
@@ -97,7 +100,8 @@ function dislikeCard(req, res) {
     if (!card) return Promise.reject(new Error(errNotFound.msg));
     return res.send({ data: card });
   }).catch((err) => {
-    processIdSearchErr(req, res, err);
+    // handleIdErr(req, res, err);
+    handleIdErr(res, err);
   });
 }
 
