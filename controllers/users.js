@@ -5,7 +5,7 @@ const User = require('../models/user');
 const {
   errIncorrectData, errNotFound, errDefault, errValidationErr, errMongoServerError,
   errAuth, errIllegalArgsPattern, /* logPassLint, */pswSoltLen, TOKEN_KEY,
-  id4TokenUser, tokenDuration, /* errCastErr, errName, */
+  /* id4TokenUser, */tokenDuration, /* errCastErr, errName, */
 } = require('../utils/constants');
 const { logPassLint, handleIdErr } = require('../utils/miscutils');
 
@@ -180,12 +180,12 @@ function login(req, res) {
     console.log(`Credentials user: ${user}`);
     // const token = jwt.sign({ _id: id4TokenUser }, TOKEN_KEY, { expiresIn: tokenDuration });
     const token = jwt.sign({ _id: user._id }, TOKEN_KEY, { expiresIn: tokenDuration });
-    // res.send({ token }); // сделать запись JWT в httpOnly куку: если не пройдёт - откатить
-    res.cookie('jwt', token, {
+    res.send({ token }); // сделать запись JWT в httpOnly куку: если не пройдёт - откатить
+    /* res.cookie('jwt', token, {
       // maxAge: tokenDuration, // make function 4 token in sec & so on 2 ms (ms m h d)
       maxAge: 3600000 * 24 * 7, // add a piece 4 token transfer duration
       httpOnly: true,
-    }).end();
+    }).end(); */
   }).catch((err) => {
     console.log(`Login error ${err.name}: ${err}`);
     res.status(errAuth.num).send({ message: errAuth.msg });
