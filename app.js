@@ -30,7 +30,7 @@ app.post('/signin', login);
 app.post('/signup', createUser);
 
 // роуты, которым нужна авторизация:
-// app.use(auth);
+app.use(auth);
 app.use(USERS, userRouter);
 app.use(CARDS, cardRouter);
 app.patch('/*', (req, res) => {
