@@ -74,7 +74,7 @@ function getUserIInfo(req, res) {
     };
     return res.send({ data: user });
   }).catch((err) => {
-    console.log(`Get user info: ${err}`)
+    console.log(`Get user info: ${err}`);
     handleIdErr(res, err);
   });
 }
@@ -87,7 +87,11 @@ function createUser(req, res, next) {
   bcrypt.hash(req.body.password, pswSoltLen).then((password) => User.create({
     name, about, avatar, email, password,
   })).then((user) => {
-    res.send({ data: user });
+    res.send({
+      data: {
+        name: user.name, about: user.about, avatar: user.avatar, email: user.email,
+      },
+    });
   }).catch((err) => {
     console.log(`createUser err: ${err.name} / ${err.message}`);
     if (err.name === errValidationErr) next(err);

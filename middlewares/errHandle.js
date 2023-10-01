@@ -7,10 +7,11 @@ const {
 const { logPassLint/* , handleIdErr */ } = require('../utils/miscutils');
 
 module.exports = (err, req, res, next) => {
-  console.log(`Err handle started ${err.name}: ${Object.entries(err).join('; ')}`);
+  console.log(`Err handle started ${err.name}`); // : ${Object.entries(err).join('; ')}
   switch (err.name) {
     case errValidationErr:
-      logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
+      // !! err не выводить: вывод celebrat'a дико flood'ит, в консоли не найдёшь концов !!
+      logPassLint(`Error ${errIncorrectData.num}: ${errIncorrectData.msg}`, true);
       res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
       break;
     case errMongoServerError:

@@ -2,8 +2,10 @@ const { MONGODB = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
+const { errors } = require('celebrate');
 
 const auth = require('./middlewares/auth');
+// const celebrate = require('./middlewares/joiValidate');
 const errHandle = require('./middlewares/errHandle');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
@@ -26,8 +28,9 @@ app.use((req, res, next) => logger(req, res, next, true));
   };
   next();
 }); */
-app.post('/signin', login);
-app.post('/signup', createUser);
+// app.use(celebrate);
+app.post('/signin', /* celebrate, */login);
+app.post('/signup', /* celebrate, */createUser);
 
 // роуты, которым нужна авторизация:
 app.use(auth);
@@ -42,6 +45,7 @@ app.patch('/*', (req, res) => {
   }
 });
 
+app.use(errors());
 app.use(errHandle);
 app.listen(PORT, () => {
   logPassLint(`App listening on port ${PORT}`, true);
