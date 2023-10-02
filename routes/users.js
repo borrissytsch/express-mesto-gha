@@ -1,4 +1,6 @@
 const userRouter = require('express').Router();
+// const { celebrate } = require('celebrate');
+const { idJoiTest, userJoiTest, avatarJoiTest } = require('../middlewares/joiValidate');
 const { userRoutes } = require('../utils/constants');
 const {
   getUsers, getUserById, getUserIInfo, /* createUser, */updateProfile, updateAvatar,
@@ -7,10 +9,10 @@ const {
 const { userId, userProfile, userAvatar } = userRoutes;
 
 userRouter.get('/', getUsers);
-userRouter.get(userId, getUserById);
 userRouter.get(userProfile, getUserIInfo);
+userRouter.get(userId, idJoiTest(), getUserById);
 // userRouter.post('/', createUser); // moved 2 app
-userRouter.patch(userProfile, updateProfile);
-userRouter.patch(userAvatar, updateAvatar);
+userRouter.patch(userProfile, userJoiTest(), updateProfile);
+userRouter.patch(userAvatar, avatarJoiTest(), updateAvatar);
 
 module.exports = userRouter;

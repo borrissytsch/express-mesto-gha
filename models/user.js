@@ -49,10 +49,10 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.statics.findUserByCredentials = function (email, password) { // should't be an arrow fn
-  console.log(`User credentials starts: ${email} & ${password}`);
+  // console.log(`User credentials starts: ${email} & ${password}`);
   return this.findOne({ email }).select('+password') // this — это модель User
     .then((user) => {
-      console.log(`Found user: ${user}`);
+      // console.log(`Found user: ${user}`);
       if (!user) {
         return Promise.reject(new Error(errAuth.msg));
       }
