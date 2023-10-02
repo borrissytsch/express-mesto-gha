@@ -28,6 +28,10 @@ const cardRoutes = {
 const signInRoute = '/signin';
 const signUpRoute = '/signup';
 /* User model config consts */
+const strSchMinLen = 2;
+const strSchMaxLen = 30;
+const idSchemaLen = 24;
+const strSchPassLen = 8;
 const usrName = 'Жак-Ив Кусто';
 const usrAbout = 'Исследователь';
 const usrAvatar = 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png';
@@ -96,6 +100,10 @@ module.exports = {
   cardRoutes,
   signInRoute,
   signUpRoute,
+  strSchMinLen,
+  strSchMaxLen,
+  idSchemaLen,
+  strSchPassLen,
   usrName,
   usrAbout,
   usrAvatar,

@@ -3,19 +3,20 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const {
   usrName, usrAbout, usrAvatar, usrEmailFailMsg, errAuth, usrLinkFailMsg, /* logPassLint, */
+  strSchMinLen, strSchMaxLen, strSchPassLen,
 } = require('../utils/constants');
 
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    minlength: 2,
-    maxlength: 30,
+    minlength: strSchMinLen,
+    maxlength: strSchMaxLen,
     default: usrName,
   },
   about: {
     type: String,
-    minlength: 2,
-    maxlength: 30,
+    minlength: strSchMinLen,
+    maxlength: strSchMaxLen,
     default: usrAbout,
   },
   avatar: {
@@ -44,6 +45,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+    minlength: strSchPassLen,
     select: false,
   },
 });
