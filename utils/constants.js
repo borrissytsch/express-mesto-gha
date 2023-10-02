@@ -45,6 +45,7 @@ const authHeaderPattern = 'Bearer ';
 const authNeedMsg = 'Необходима авторизация';
 
 /* Error processing config consts */
+const resOkDefault = 200;
 const errIncorrectData = {
   num: 400,
   name: 'Incorrect data',
@@ -115,6 +116,7 @@ module.exports = {
   authHeaderPattern,
   authNeedMsg,
   // logger,
+  resOkDefault,
   errIncorrectData,
   errAuth,
   errNotFound,

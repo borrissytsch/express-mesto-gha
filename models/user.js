@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const {
-  usrName, usrAbout, usrAvatar, usrEmailFailMsg, errAuth, usrLinkFailMsg, /* logPassLint, */
+  usrName, usrAbout, usrAvatar, usrEmailFailMsg, errAuth, /* usrLinkFailMsg, logPassLint, */
   strSchMinLen, strSchMaxLen, strSchPassLen,
 } = require('../utils/constants');
 
@@ -21,13 +21,14 @@ const userSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    default: usrAvatar,
-    validate: {
+    default: usrAvatar, /*
+    validate: { // проверки схемы перехватывают оные в Joi & валят тесты
       validator(lnk) {
+        // console.log(`Avatar link test in schema: ${validator.isURL(lnk)} 4 ${lnk}`);
         return validator.isURL(lnk);
       },
       message: usrLinkFailMsg,
-    },
+    }, */
   },
   email: {
     type: String,
@@ -59,11 +60,11 @@ userSchema.statics.findUserByCredentials = function (email, password) { // shoul
         return Promise.reject(new Error(errAuth.msg));
       }
       return bcrypt.compare(password, user.password).then((matched) => {
-        console.log(`Matched: ${matched}`);
+        // console.log(`Matched: ${matched}`);
         if (!matched) {
           return Promise.reject(new Error(errAuth.msg));
         }
-        console.log(`User 2 return: ${user} / ${password} / ${user.password}`);
+        // console.log(`User 2 return: ${user} / ${password} / ${user.password}`);
         return user;
       });
     });

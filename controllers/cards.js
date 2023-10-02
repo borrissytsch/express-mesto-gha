@@ -1,7 +1,7 @@
 const Card = require('../models/card');
 const {
-  errIncorrectData, errNotFound, errDefault, /* errCastErr, */ errValidationErr, // errName,
-} = require('../utils/constants');
+  resOkDefault, errIncorrectData, errNotFound, errDefault, /* errCastErr, */ errValidationErr,
+} = require('../utils/constants'); // errName,
 const { logPassLint, handleIdErr } = require('../utils/miscutils');
 
 function getCards(req, res) {
@@ -14,7 +14,7 @@ function getCards(req, res) {
 }
 
 function createCard(req, res) {
-  // logPassLint(`${Object.entries(req.body).join('; ')} / ${req.user._id}`, true)
+  logPassLint(`${Object.entries(req.body).join('; ')} / ${req.user._id}`, true); //
   const {
     name, link, owner = req.user._id, likes,
   } = req.body;
@@ -23,11 +23,11 @@ function createCard(req, res) {
       name, link, owner, likes,
     },
   ).then((card) => {
-    logPassLint(`POST response 2 card sent: ${Object.entries(
+    logPassLint(`POST response 2 card sent: ${Object.entries( // \
       {
         name: card.name, link: card.link, owner: card.owner, likes: card.likes, _id: card._id,
       },
-    ).join('; ')}`, true);
+    ).join('; ')}`, true); // /
     res.send({
       data: {
         name: card.name, link: card.link, owner: card.owner, likes: card.likes, _id: card._id,
@@ -59,12 +59,13 @@ function createCard(req, res) {
 
 function deleteCardById(req, res) {
   const { cardId, owner } = req.params;
+  console.log(`Del card: ${cardId} owned by ${owner}`);
   try {
     if (owner !== req.user._id) throw new Error('Only card owner can delete a card');
     // Card.findByIdAndRemove(req.params.cardId).then((card) => {
     Card.findByIdAndRemove(cardId).then((card) => {
       if (!card) return Promise.reject(new Error(errNotFound.msg));
-      return res.send({ data: card });
+      return res.status(resOkDefault).send({ data: card });
     }).catch((err) => {
       // handleIdErr(req, res, err);
       handleIdErr(res, err);

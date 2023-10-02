@@ -15,7 +15,7 @@ const signJoiTest = (signFields = {
 }) => celebrate(signFields);
 const idJoiTest = (id = {
   body: Joi.object().keys({
-    id: Joi.string().hex().length(idSchemaLen),
+    _id: Joi.string().hex().length(idSchemaLen),
   }).unknown(true),
 }) => celebrate(id);
 const userJoiTest = (user = {

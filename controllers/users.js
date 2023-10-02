@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 const {
-  errIncorrectData, errNotFound, errDefault, errValidationErr, errMongoServerError,
+  errIncorrectData, errNotFound, errDefault, errValidationErr, // errMongoServerError,
   errAuth, errIllegalArgsPattern, /* logPassLint, */pswSoltLen, TOKEN_KEY,
   /* id4TokenUser, */tokenDuration, /* errCastErr, errName, */
 } = require('../utils/constants');
@@ -38,10 +38,10 @@ function getUserById(req, res) {
   User.findById(userId).then((mongUser) => {
     if (!mongUser) return Promise.reject(new Error(errNotFound.msg));
     const {
-      name, about, avatar, _id,
+      name, about, avatar, email, _id,
     } = mongUser;
     const user = {
-      name, about, avatar, _id,
+      name, about, avatar, email, _id,
     };
     // console.log(`User 2 send 4 response: ${Object.entries(user).join('; ')}`);
     return res.send({ data: user });
@@ -68,10 +68,10 @@ function getUserIInfo(req, res) {
   User.findById(userId).then((mongUser) => {
     if (!mongUser) return Promise.reject(new Error(errNotFound.msg));
     const {
-      name, about, avatar,
+      name, about, avatar, email,
     } = mongUser;
     const user = {
-      name, about, avatar,
+      name, about, avatar, email,
     };
     return res.send({ data: user });
   }).catch((err) => {
@@ -95,9 +95,9 @@ function createUser(req, res, next) {
     });
   }).catch((err) => {
     // console.log(`createUser err: ${err.name} / ${err.message}`);
-    if (err.name === errValidationErr) next(err);
+    /* if (err.name === errValidationErr) next(err);
     if (err.name === errMongoServerError) next(err);
-    /* if (err.name === errValidationErr) {
+    if (err.name === errValidationErr) {
       // console.log(`create user validation error catched: ${err.name}`)
       next(err);
       logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
@@ -107,7 +107,12 @@ function createUser(req, res, next) {
         logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
         res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
       }
-    } /* else {
+    } else { // этот else вместо 2-х первых if'ов, эти проверки делаются в middlewar'e
+      // console.log(`Next 2 err handle middlewar'e: ${err.name}`);
+      if (err) next(err);
+      logPassLint(`Error ${errDefault.num}: ${err}`, true);
+      res.status(errDefault.num).send({ message: errDefault.msg });
+    }/* else {
       logPassLint(`Error ${errDefault.num}: ${err}`, true);
       res.status(errDefault.num).send({ message: errDefault.msg });
     } */
