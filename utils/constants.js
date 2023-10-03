@@ -12,8 +12,8 @@ const {
 const userDirs = { id: 'userId', profile: 'me', avatar: 'avatar' };
 const cardDirs = { id: 'cardId', likes: 'likes' };
 const userRoutes = {
-  // userId: `${USERS}/:${userDirs.id}`,
-  userId: `/:${userDirs.id}`,
+  userId: `${USERS}/:${userDirs.id}`,
+  // userId: `/:${userDirs.id}`,
   // userProfile: `${USERS}/${userDirs.profile}`,
   userProfile: `/${userDirs.profile}`,
   // userAvatar: `${USERS}/${userDirs.profile}/${userDirs.avatar}`,
@@ -22,8 +22,8 @@ const userRoutes = {
 const cardRoutes = {
   // cardId: `${CARDS}/:${cardDirs.id}`,
   cardId: `/:${cardDirs.id}`,
-  // cardLikes: `${CARDS}/:${cardDirs.id}/${cardDirs.likes}`,
-  cardLikes: `/:${cardDirs.id}/${cardDirs.likes}`,
+  cardLikes: `${CARDS}/:${cardDirs.id}/${cardDirs.likes}`,
+  // cardLikes: `/:${cardDirs.id}/${cardDirs.likes}`,
 };
 const signInRoute = '/signin';
 const signUpRoute = '/signup';
@@ -44,7 +44,8 @@ const tokenDuration = '7d';
 const authHeaderPattern = 'Bearer ';
 const authNeedMsg = 'Необходима авторизация';
 
-/* Validation consts */
+/* Validation consts 4 joi failed patterns */
+const idPattern = /^[0-9a-f]{24}$/;
 const lnkAvatarPattern = /^(https?:\/\/)?(w{3}[0-9]?\.)?[0-9a-z_]+[0-9a-z._-]*\.[0-9a-z_]+(\/[0-9a-z_]+[0-9a-z._-]*)*(#|\/)?$/;
 
 /* Error processing config consts */
@@ -88,16 +89,6 @@ const errIllegalArgsPattern = /^Illegal arguments: /;
 const errDuplicateKeyPattern = /^E11000 duplicate key error collection: /;
 /* Miscellaneous consts */
 const pswSoltLen = 12;
-/* const logPassLint = (
-  msg,
-  logFlag = false,
-  msgLog = (msg2Log = msg, log2Flag = logFlag) => { if (log2Flag) console.log(msg2Log); },
-) => msgLog(msg, logFlag);
-/* Router common consts */ /*
-const logger = (req, res, next, logTraceFlag = false, logTraceMsg = 'Request is logged on') => {
-  if (logTraceFlag) logPassLint(logTraceMsg, true);
-  next();
-}; */
 
 module.exports = {
   PORT,
@@ -124,6 +115,7 @@ module.exports = {
   tokenDuration,
   authHeaderPattern,
   authNeedMsg,
+  idPattern,
   lnkAvatarPattern,
   // logger, // moved 2 miscutils
   resOkDefault,

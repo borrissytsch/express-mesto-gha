@@ -33,7 +33,8 @@ function getUsers(req, res) {
 
 // if (!mongUser) return Promise.reject(new Error(`User ${userId} doesn't exist, try another _id`))
 function getUserById(req, res) {
-  // console.log(`Get user by id ${req.params}`);
+  /* console.log
+  (`Get user by id ${Object.entries(req.params).join('; ')} / this out means Joi test failed`); */
   const { userId } = req.params;
   User.findById(userId).then((mongUser) => {
     if (!mongUser) return Promise.reject(new Error(errNotFound.msg));
@@ -47,23 +48,13 @@ function getUserById(req, res) {
     return res.send({ data: user });
   }).catch((err) => { // Вынести эту ф-цию и logger & logPassLint в отдельный файл в utils(res,err)
     handleIdErr(res, err);
-    /* if (err.name === errCastErr) {
-      logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
-      res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
-    } else if (err.name === errName && err.message === errNotFound.msg) {
-      logPassLint(`Error ${errNotFound.num}: ${err}`, true);
-      res.status(errNotFound.num).send({ message: errNotFound.msg });
-    } else {
-      logPassLint(err, true);
-      res.status(errDefault.num).send({ message: err });
-    } */
   });
 }
 
 function getUserIInfo(req, res) {
   // достать из obj user, доступного после аутентификации
   // console.log(`Get user: ${req.user._id}`);
-  const userId = req.user._id/* '6518accbf23d8d13d04a2d9a' 6518ab0cf23d8d13d04a2d98 */;
+  const userId = req.user._id;
   // console.log(`Get user: ${userId}`);
   User.findById(userId).then((mongUser) => {
     if (!mongUser) return Promise.reject(new Error(errNotFound.msg));

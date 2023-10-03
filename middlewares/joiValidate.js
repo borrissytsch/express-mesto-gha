@@ -1,6 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 const {
-  strSchMinLen, strSchMaxLen, idSchemaLen, strSchPassLen, lnkAvatarPattern,
+  strSchMinLen, strSchMaxLen, idSchemaLen, strSchPassLen, idPattern, lnkAvatarPattern,
 } = require('../utils/constants');
 
 /* Users' Joi test patterns */
@@ -14,8 +14,8 @@ const signJoiTest = (signFields = {
   }).unknown(true),
 }) => celebrate(signFields);
 const idJoiTest = (id = {
-  body: Joi.object().keys({
-    _id: Joi.string().hex().length(idSchemaLen),
+  params: Joi.object().keys({
+    _id: Joi.string().hex().length(idSchemaLen).pattern(idPattern),
   }).unknown(true),
 }) => celebrate(id);
 const userJoiTest = (user = {

@@ -7,7 +7,7 @@ const {
 const { logPassLint/* , handleIdErr */ } = require('../utils/miscutils');
 
 module.exports = (err, req, res, next) => {
-  console.log(`Err handle started ${err.name} / ${err.message}`);
+  // console.log(`Err handle started ${err.name} / ${err.message}`);
   switch (err.name) {
     case errValidationErr:
       // !! err не выводить: вывод celebrat'a дико flood'ит, в консоли не найдёшь концов !!
@@ -32,7 +32,6 @@ module.exports = (err, req, res, next) => {
       res.status(err.statusCode).send({ message: err.message });
       break;
     default:
-      // console.log(`Default err handling: ${err}`);
       logPassLint(`Error ${errDefault.num}: ${errDefault.msg}`, true);
       res.status(errDefault.num).send({ message: errDefault.msg });
   }
