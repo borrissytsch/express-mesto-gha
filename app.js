@@ -22,22 +22,15 @@ mongoose.connect(MONGODB, { useNewUrlParser: true });
 app.use(bodyParser.json());
 // app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use((req, res, next) => logger(req, res, next, true));
-/* app.use((req, res, next) => {
-  req.user = {
-    _id: '650a210d048a6ca35d75903f',
-  };
-  next();
-}); */
 app.post('/signin', signJoiTest(), login);
 app.post('/signup', signJoiTest(), createUser);
 
 // роуты, которым нужна авторизация:
 app.use(auth);
 app.use(USERS, userRouter);
-// app.use('/', userRouter);
 app.use(CARDS, cardRouter);
-// app.use('/', cardRouter);
 app.patch('/*', (req, res) => {
   try {
     throw new Error("Path 2 be processed doesn't exist");

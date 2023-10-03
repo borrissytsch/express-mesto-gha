@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 const {
-  errIncorrectData, errNotFound, errDefault, errValidationErr, // errMongoServerError,
-  errAuth, errIllegalArgsPattern, /* logPassLint, */pswSoltLen, TOKEN_KEY,
-  /* id4TokenUser, */tokenDuration, /* errCastErr, errName, */
+  errIncorrectData, errNotFound, errDefault, errValidationErr,
+  errAuth, errIllegalArgsPattern, pswSoltLen, TOKEN_KEY,
+  tokenDuration,
 } = require('../utils/constants');
 const { logPassLint, handleIdErr } = require('../utils/miscutils');
 
@@ -18,23 +18,7 @@ function getUsers(req, res) {
   });
 }
 
-/* function handleIdErr(res, err) {
-  if (err.name === errCastErr) {
-    logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
-    res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
-  } else if (err.name === errName && err.message === errNotFound.msg) {
-    logPassLint(`Error ${errNotFound.num}: ${err}`, true);
-    res.status(errNotFound.num).send({ message: errNotFound.msg });
-  } else {
-    logPassLint(err, true);
-    res.status(errDefault.num).send({ message: err });
-  }
-} */
-
-// if (!mongUser) return Promise.reject(new Error(`User ${userId} doesn't exist, try another _id`))
 function getUserById(req, res) {
-  /* console.log
-  (`Get user by id ${Object.entries(req.params).join('; ')} / this out means Joi test failed`); */
   const { userId } = req.params;
   User.findById(userId).then((mongUser) => {
     if (!mongUser) return Promise.reject(new Error(errNotFound.msg));
@@ -46,7 +30,7 @@ function getUserById(req, res) {
     };
     // console.log(`User 2 send 4 response: ${Object.entries(user).join('; ')}`);
     return res.send({ data: user });
-  }).catch((err) => { // Вынести эту ф-цию и logger & logPassLint в отдельный файл в utils(res,err)
+  }).catch((err) => {
     handleIdErr(res, err);
   });
 }
@@ -85,22 +69,14 @@ function createUser(req, res, next) {
       },
     });
   }).catch((err) => {
-    // console.log(`createUser err: ${err.name} / ${err.message}`);
-    /* if (err.name === errValidationErr) next(err);
-    if (err.name === errMongoServerError) next(err);
-    if (err.name === errValidationErr) {
-      // console.log(`create user validation error catched: ${err.name}`)
-      next(err);
-      logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
-      res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
-    } else */ if (err instanceof Error) {
+    if (err instanceof Error) {
       if (errIllegalArgsPattern.test(err.message)) {
         // console.log(`Illegal args: ${err.name}`);
         logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
         res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
         return;
       }
-    } // else { этот else вместо 2-х первых if'ов, эти проверки делаются в middlewar'e
+    }
     // console.log(`Next 2 err handle middlewar'e: ${err.name}`);
     if (err) {
       next(err);
@@ -163,24 +139,9 @@ function updateAvatar(req, res) {
 
 function login(req, res) {
   const { email, password } = req.body;
-  /* User.findOne({ email })
-    .then((user) => {
-      if (!user) {
-        return Promise.reject(new Error(errAuth.msg));
-      }
-      return bcrypt.compare(password, user.password);
-    }).then((matched) => {
-      if (!matched) {
-        // хеши не совпали — отклоняем промис
-        return Promise.reject(new Error(errAuth.msg));
-      }
 
-      // аутентификация успешна
-      res.send({ message: 'Всё верно!' }); */
-  // Блок с return до catch вместо закомментаренного текста (его замена на аутентификацию в модели)
   return User.findUserByCredentials(email, password).then((user) => { // в token надо user._id
     // console.log(`Credentials user: ${user}`);
-    // const token = jwt.sign({ _id: id4TokenUser }, TOKEN_KEY, { expiresIn: tokenDuration });
     const token = jwt.sign({ _id: user._id }, TOKEN_KEY, { expiresIn: tokenDuration });
     // console.log(`Token: ${token}`);
     res.send({ token }); // сделать запись JWT в httpOnly куку: если не пройдёт - откатить

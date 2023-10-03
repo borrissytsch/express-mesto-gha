@@ -2,9 +2,8 @@
 const {
   errIncorrectData, errEmailExists, errNotFound, errForbidden, errDefault, errValidationErr,
   errMongoServerError, errDuplicateKeyPattern,
-  /* errIllegalArgsPattern, pswSoltLen, TOKEN_KEY, id4TokenUser, tokenDuration, */
-} = require('../utils/constants'); // errCastErr, errName, errAuth,
-const { logPassLint/* , handleIdErr */ } = require('../utils/miscutils');
+} = require('../utils/constants');
+const { logPassLint } = require('../utils/miscutils');
 
 module.exports = (err, req, res, next) => {
   // console.log(`Err handle started ${err.name} / ${err.message}`);

@@ -26,11 +26,6 @@ function createCard(req, res) {
       name, link, owner, likes,
     },
   ).then((card) => {
-    /* console.log(`POST response 2 card sent: ${Object.entries( // \
-      {
-        name: card.name, link: card.link, owner: card.owner, likes: card.likes, _id: card._id,
-      },
-    ).join('; ')}`); // */
     res.send({
       data: {
         name: card.name, link: card.link, owner: card.owner, likes: card.likes, _id: card._id,

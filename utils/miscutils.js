@@ -1,7 +1,8 @@
 const {
   errIncorrectData, errNotFound, errDefault, errCastErr, errName,
 } = require('./constants');
-/* Miscellaneous procedures (which have no refed result) */
+
+/* Miscellaneous procedures (which haven't refed result) */
 const logPassLint = (
   msg,
   logFlag = false,

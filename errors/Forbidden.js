@@ -2,8 +2,8 @@
 
 const { errForbidden } = require('../utils/constants');
 
+// class Forbidden extends ValidationErr {
 class Forbidden extends Error { // Импорт классов не работает, отключить линтер и сделать в 1 файле
-  // class Forbidden extends ValidationErr {
   constructor(message = errForbidden.msg) {
     super(message);
     this.name = errForbidden.name;

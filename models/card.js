@@ -14,7 +14,7 @@ const cardSchema = new mongoose.Schema({
   link: {
     type: String,
     required: true,
-    validate: { // Конфликтует с Joi, рушит тесты
+    validate: {
       validator(lnk) {
         // console.log(`Card link test in schema: ${validator.isURL(lnk)} 4 ${lnk}`);
         return validator.isURL(lnk);

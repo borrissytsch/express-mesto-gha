@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const {
-  usrName, usrAbout, usrAvatar, usrEmailFailMsg, errAuth, /* usrLinkFailMsg, logPassLint, */
+  usrName, usrAbout, usrAvatar, usrEmailFailMsg, errAuth,
   strSchMinLen, strSchMaxLen, strSchPassLen,
 } = require('../utils/constants');
 

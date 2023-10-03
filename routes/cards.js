@@ -10,7 +10,7 @@ const { cardId, cardLikes } = cardRoutes;
 cardRouter.get('/', getCards);
 cardRouter.post('/', cardJoiTest(), createCard);
 cardRouter.delete(cardId, cardIdJoiTest(), deleteCardById);
-cardRouter.put(cardLikes, cardIdJoiTest(), likeCard); // Joi requires abs paths
+cardRouter.put(cardLikes, cardIdJoiTest(), likeCard);
 cardRouter.delete(cardLikes, cardIdJoiTest(), dislikeCard);
 
 module.exports = cardRouter;

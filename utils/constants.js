@@ -39,7 +39,6 @@ const usrEmailFailMsg = 'Field typed is not a valid e-mail address';
 const usrLinkFailMsg = 'Incorrect link address';
 
 /* User auth config consts */
-// const id4TokenUser = 'd285e3dceed844f902650f40'; // temp const 4 1st work, remove from final ver
 const tokenDuration = '7d';
 const authHeaderPattern = 'Bearer ';
 const authNeedMsg = 'Необходима авторизация';
