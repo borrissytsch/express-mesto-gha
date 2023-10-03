@@ -4,7 +4,7 @@ const { errNotFound } = require('../utils/constants');
 
 class NotFound extends Error {
   // class NotFound extends ValidationErr {
-  constructor(message) {
+  constructor(message = errNotFound.msg) {
     super(message);
     this.name = errNotFound.name;
     this.statusCode = errNotFound.num;
