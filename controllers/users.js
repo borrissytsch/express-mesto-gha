@@ -94,7 +94,7 @@ function createUser(req, res, next) {
       },
     });
   }).catch((err) => {
-    // console.log(`createUser err: ${err.name} / ${err.message}`);
+    console.log(`createUser err: ${err.name} / ${err.message}`);
     /* if (err.name === errValidationErr) next(err);
     if (err.name === errMongoServerError) next(err);
     if (err.name === errValidationErr) {
@@ -104,18 +104,19 @@ function createUser(req, res, next) {
       res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
     } else */ if (err instanceof Error) {
       if (errIllegalArgsPattern.test(err.message)) {
+        console.log(`Illegal args: ${err.name}`);
         logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
         res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
+        return;
       }
-    } else { // этот else вместо 2-х первых if'ов, эти проверки делаются в middlewar'e
-      // console.log(`Next 2 err handle middlewar'e: ${err.name}`);
-      if (err) next(err);
+    } // else { этот else вместо 2-х первых if'ов, эти проверки делаются в middlewar'e
+    // console.log(`Next 2 err handle middlewar'e: ${err.name}`);
+    if (err) {
+      next(err);
+    } else {
       logPassLint(`Error ${errDefault.num}: ${err}`, true);
       res.status(errDefault.num).send({ message: errDefault.msg });
-    }/* else {
-      logPassLint(`Error ${errDefault.num}: ${err}`, true);
-      res.status(errDefault.num).send({ message: errDefault.msg });
-    } */
+    }
   });
 }
 

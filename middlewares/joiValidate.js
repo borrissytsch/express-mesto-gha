@@ -10,7 +10,7 @@ const signJoiTest = (signFields = {
     password: Joi.string().required().min(strSchPassLen),
     name: Joi.string().min(strSchMinLen).max(strSchMaxLen),
     about: Joi.string().min(strSchMinLen).max(strSchMaxLen),
-    avatar: Joi.string().uri().pattern(/^(https?:\/\/)?(w{3}\.)?[0-9a-z_]+[0-9a-z._-]*\.[0-9a-z_]+(\/[0-9a-z_]+[0-9a-z._-]*)*(#|\/)?$/),
+    avatar: Joi.string().uri().pattern(/^(https?:\/\/)?(w{3}[0-9]?\.)?[0-9a-z_]+[0-9a-z._-]*\.[0-9a-z_]+(\/[0-9a-z_]+[0-9a-z._-]*)*(#|\/)?$/),
   }).unknown(true),
 }) => celebrate(signFields);
 const idJoiTest = (id = {
