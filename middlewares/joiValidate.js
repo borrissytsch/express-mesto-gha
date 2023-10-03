@@ -15,7 +15,7 @@ const signJoiTest = (signFields = {
 }) => celebrate(signFields);
 const idJoiTest = (id = {
   params: Joi.object().keys({
-    _id: Joi.string().hex().length(idSchemaLen).pattern(idPattern),
+    userId: Joi.string().hex().length(idSchemaLen).pattern(idPattern),
   }).unknown(true),
 }) => celebrate(id);
 const userJoiTest = (user = {
@@ -31,6 +31,11 @@ const avatarJoiTest = (avatarUrl = {
 }) => celebrate(avatarUrl);
 
 /* Cards' Joi test patterns */
+const cardIdJoiTest = (id = {
+  params: Joi.object().keys({
+    cardId: Joi.string().hex().length(idSchemaLen).pattern(idPattern),
+  }).unknown(true),
+}) => celebrate(id);
 const cardJoiTest = (card = {
   body: Joi.object().keys({
     name: Joi.string().required().min(strSchMinLen).max(strSchMaxLen),
@@ -39,5 +44,5 @@ const cardJoiTest = (card = {
 }) => celebrate(card);
 
 module.exports = {
-  signJoiTest, idJoiTest, userJoiTest, avatarJoiTest, cardJoiTest,
+  signJoiTest, idJoiTest, userJoiTest, avatarJoiTest, cardIdJoiTest, cardJoiTest,
 };
