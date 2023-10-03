@@ -11,7 +11,7 @@ const errHandle = require('./middlewares/errHandle');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const {
-  PORT, /* USERS, CARDS, logger, */errNotFound, // logPassLint,
+  PORT, USERS, CARDS, /* logger, */errNotFound, // logPassLint,
 } = require('./utils/constants');
 const { logger, logPassLint } = require('./utils/miscutils');
 const { login, createUser } = require('./controllers/users');
@@ -34,10 +34,10 @@ app.post('/signup', signJoiTest(), createUser);
 
 // роуты, которым нужна авторизация:
 app.use(auth);
-// app.use(USERS, userRouter);
-app.use('/', userRouter);
-// app.use(CARDS, cardRouter);
-app.use('/', cardRouter);
+app.use(USERS, userRouter);
+// app.use('/', userRouter);
+app.use(CARDS, cardRouter);
+// app.use('/', cardRouter);
 app.patch('/*', (req, res) => {
   try {
     throw new Error("Path 2 be processed doesn't exist");
