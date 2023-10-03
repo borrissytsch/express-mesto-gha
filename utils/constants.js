@@ -14,14 +14,14 @@ const cardDirs = { id: 'cardId', likes: 'likes' };
 const userRoutes = {
   userId: `${USERS}/:${userDirs.id}`,
   // userId: `/:${userDirs.id}`,
-  // userProfile: `${USERS}/${userDirs.profile}`,
-  userProfile: `/${userDirs.profile}`,
-  // userAvatar: `${USERS}/${userDirs.profile}/${userDirs.avatar}`,
-  userAvatar: `/${userDirs.profile}/${userDirs.avatar}`,
+  userProfile: `${USERS}/${userDirs.profile}`,
+  // userProfile: `/${userDirs.profile}`,
+  userAvatar: `${USERS}/${userDirs.profile}/${userDirs.avatar}`,
+  // userAvatar: `/${userDirs.profile}/${userDirs.avatar}`,
 };
 const cardRoutes = {
-  // cardId: `${CARDS}/:${cardDirs.id}`,
-  cardId: `/:${cardDirs.id}`,
+  cardId: `${CARDS}/:${cardDirs.id}`,
+  // cardId: `/:${cardDirs.id}`,
   cardLikes: `${CARDS}/:${cardDirs.id}/${cardDirs.likes}`,
   // cardLikes: `/:${cardDirs.id}/${cardDirs.likes}`,
 };
