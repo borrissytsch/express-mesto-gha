@@ -19,7 +19,7 @@ module.exports = (req, res, next) => {
     return res.status(errAuth.num).send({ message: authNeedMsg });
   }
   req.user = payload; // записываем payload в запрос & шлём дальше
-  // console.log(`Go on: ${req.user}`);
+  // console.log(`Go on ${req.user._id}: ${Object.entries(req.user).join('; ')}`);
   next();
   return true;
 };

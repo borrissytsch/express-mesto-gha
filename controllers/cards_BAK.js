@@ -1,9 +1,7 @@
 const Card = require('../models/card');
-const NotFound = require('../errors/NotFound');
-
 const {
-  resOkDefault, errIncorrectData, errForbidden, errNotFound, errDefault, errValidationErr,
-} = require('../utils/constants'); // errCastErr, errName,
+  resOkDefault, errIncorrectData, errNotFound, errDefault, /* errCastErr, */ errValidationErr,
+} = require('../utils/constants'); // errName,
 const { logPassLint, handleIdErr } = require('../utils/miscutils');
 
 function getCards(req, res) {
@@ -59,32 +57,25 @@ function createCard(req, res) {
   }
 } */
 
-function deleteCardById(req, res, next) {
-  // const { cardId, owner } = req.params;
-  const { cardId } = req.params;
-  Card.findById({ cardId }).then((card) => {
-    if (!card) {
-      const err = new NotFound(errNotFound.msg);
-      next(err);
-      return;
-    }
-    const { owner } = card;
-    console.log(`Del card ${cardId} owned by ${owner} starts 4: ${req.user._id}`);
-    try {
-      if (owner !== req.user._id) throw new Error(errForbidden.msg);
-      // Card.findByIdAndRemove(req.params.cardId).then((card) => {
-      Card.findByIdAndRemove(cardId).then((MongoCard) => {
-        // if (!card) return Promise.reject(new Error(errNotFound.msg));
-        if (!MongoCard) return Promise.reject(new NotFound(errNotFound.msg));
-        console.log(`Card ${cardId} has been deleted with status: ${resOkDefault} / ${MongoCard}`);
-        return res.status(resOkDefault).send({ data: MongoCard });
-      }).catch((err) => {
-        next(err);
-      });
-    } catch (err) {
-      next(err);
-    }
-  });
+function deleteCardById(req, res) {
+  const { cardId, owner } = req.params;
+  // const { cardId } = req.params;
+  console.log(`Del card ${cardId} owned by ${owner} starts 4: ${req.user._id}`);
+  try {
+    if (owner !== req.user._id) throw new Error('Only card owner can delete a card');
+    // Card.findByIdAndRemove(req.params.cardId).then((card) => {
+    Card.findByIdAndRemove(cardId).then((card) => {
+      if (!card) return Promise.reject(new Error(errNotFound.msg));
+      console.log(`Card ${cardId} has been deleted with status: ${resOkDefault} / ${card}`);
+      return res.status(resOkDefault).send({ data: card });
+    }).catch((err) => {
+      // handleIdErr(req, res, err);
+      handleIdErr(res, err);
+    });
+  } catch (err) {
+    logPassLint(err, true);
+    res.status(errDefault.num).send({ message: err });
+  }
 }
 
 function likeCard(req, res) {

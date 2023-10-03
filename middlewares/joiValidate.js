@@ -1,6 +1,6 @@
 const { celebrate, Joi } = require('celebrate');
 const {
-  strSchMinLen, strSchMaxLen, idSchemaLen, strSchPassLen,
+  strSchMinLen, strSchMaxLen, idSchemaLen, strSchPassLen, lnkAvatarPattern,
 } = require('../utils/constants');
 
 /* Users' Joi test patterns */
@@ -10,7 +10,7 @@ const signJoiTest = (signFields = {
     password: Joi.string().required().min(strSchPassLen),
     name: Joi.string().min(strSchMinLen).max(strSchMaxLen),
     about: Joi.string().min(strSchMinLen).max(strSchMaxLen),
-    avatar: Joi.string().uri().pattern(/^(https?:\/\/)?(w{3}[0-9]?\.)?[0-9a-z_]+[0-9a-z._-]*\.[0-9a-z_]+(\/[0-9a-z_]+[0-9a-z._-]*)*(#|\/)?$/),
+    avatar: Joi.string().uri().pattern(lnkAvatarPattern),
   }).unknown(true),
 }) => celebrate(signFields);
 const idJoiTest = (id = {
@@ -26,7 +26,7 @@ const userJoiTest = (user = {
 }) => celebrate(user);
 const avatarJoiTest = (avatarUrl = {
   body: Joi.object().keys({
-    avatar: Joi.string().uri(),
+    avatar: Joi.string().uri().pattern(lnkAvatarPattern),
   }).unknown(true),
 }) => celebrate(avatarUrl);
 
@@ -34,7 +34,7 @@ const avatarJoiTest = (avatarUrl = {
 const cardJoiTest = (card = {
   body: Joi.object().keys({
     name: Joi.string().required().min(strSchMinLen).max(strSchMaxLen),
-    link: Joi.string().required().uri(),
+    link: Joi.string().required().uri().pattern(lnkAvatarPattern),
   }).unknown(true),
 }) => celebrate(card);
 

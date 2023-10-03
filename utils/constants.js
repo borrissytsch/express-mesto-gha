@@ -39,10 +39,13 @@ const usrEmailFailMsg = 'Field typed is not a valid e-mail address';
 const usrLinkFailMsg = 'Incorrect link address';
 
 /* User auth config consts */
-const id4TokenUser = 'd285e3dceed844f902650f40';
+// const id4TokenUser = 'd285e3dceed844f902650f40'; // temp const 4 1st work, remove from final ver
 const tokenDuration = '7d';
 const authHeaderPattern = 'Bearer ';
 const authNeedMsg = 'Необходима авторизация';
+
+/* Validation consts */
+const lnkAvatarPattern = /^(https?:\/\/)?(w{3}[0-9]?\.)?[0-9a-z_]+[0-9a-z._-]*\.[0-9a-z_]+(\/[0-9a-z_]+[0-9a-z._-]*)*(#|\/)?$/;
 
 /* Error processing config consts */
 const resOkDefault = 200;
@@ -55,6 +58,12 @@ const errAuth = {
   num: 401,
   name: 'Authentification failed',
   msg: 'Неправильные почта или пароль',
+};
+const errForbidden = {
+  num: 403,
+  name: 'Access forbidden',
+  msg: 'Only card owner can delete a card',
+
 };
 const errNotFound = {
   num: 404,
@@ -111,14 +120,16 @@ module.exports = {
   usrEmailFailMsg,
   usrLinkFailMsg,
   TOKEN_KEY,
-  id4TokenUser,
+  // id4TokenUser, // temp const 4 1st work, remove it from final ver
   tokenDuration,
   authHeaderPattern,
   authNeedMsg,
-  // logger,
+  lnkAvatarPattern,
+  // logger, // moved 2 miscutils
   resOkDefault,
   errIncorrectData,
   errAuth,
+  errForbidden,
   errNotFound,
   errEmailExists,
   errDefault,
@@ -128,6 +139,6 @@ module.exports = {
   errName,
   errIllegalArgsPattern,
   errDuplicateKeyPattern,
-  // logPassLint,
+  // logPassLint, // moved 2 miscutils
   pswSoltLen,
 };

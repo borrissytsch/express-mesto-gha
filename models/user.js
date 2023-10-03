@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     default: usrAvatar, /*
-    validate: { // проверки схемы перехватывают оные в Joi & валят тесты
+    validate: { // проверки схемы перехватывают оные в Joi & валят тесты (do pattern in joi)
       validator(lnk) {
         // console.log(`Avatar link test in schema: ${validator.isURL(lnk)} 4 ${lnk}`);
         return validator.isURL(lnk);
