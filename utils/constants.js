@@ -78,7 +78,7 @@ const errEmailExists = {
 const errDefault = {
   num: 500,
   name: 'Server error',
-  msg: 'Internal server error',
+  msg: 'На сервере произошла ошибка',
 };
 const errCastErr = 'CastError';
 const errValidationErr = 'ValidationError';

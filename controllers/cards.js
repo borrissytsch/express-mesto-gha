@@ -5,7 +5,7 @@ const Forbidden = require('../errors/Forbidden');
 const {
   resOkDefault, errIncorrectData, errNotFound, errDefault, errValidationErr,
 } = require('../utils/constants'); // errCastErr, errName,, errForbidden
-const { logPassLint, handleIdErr } = require('../utils/miscutils');
+const { logPassLint /* ,handleIdErr */ } = require('../utils/miscutils');
 
 function getCards(req, res) {
   Card.find({}).then((cardList) => {
@@ -42,7 +42,7 @@ function createCard(req, res) {
   });
 }
 
-function deleteCardById(req, res, next) {
+/* function deleteCardById(req, res, next) {
   const { cardId } = req.params;
   // console.log(`Delete card by ${cardId}`);
   Card.findById(cardId).then((card) => {
@@ -60,9 +60,51 @@ function deleteCardById(req, res, next) {
   }).catch((err) => {
     next(err);
   });
+} */
+
+function deleteCardById(req, res, next) {
+  const { cardId } = req.params;
+  // console.log(`Delete card by ${cardId}`);
+  Card.findById(cardId).then((card) => {
+    // console.log(`Del card ${cardId} owned by ${card.owner} starts 4: ${req.user._id}`);
+    if (!card) return Promise.reject(new NotFound());
+    if (String(card.owner) !== String(req.user._id)) throw new Forbidden();
+    Card.findByIdAndRemove(cardId).then((MongoCard) => {
+      if (!MongoCard) return Promise.reject(new NotFound());
+      // console.log(`Card ${cardId} was deleted with status: ${resOkDefault} / ${MongoCard}`);
+      return res.status(resOkDefault).send({ data: MongoCard });
+    }).catch((err) => {
+      next(err);
+    });
+    return resOkDefault;
+  }).catch((err) => {
+    next(err);
+  });
+}
+function updateCardById(id, updateData, updateOptions = { new: true }) {
+  return Card.findByIdAndUpdate(id, updateData, updateOptions).then((card) => {
+    if (!card) return Promise.reject(new Error(errNotFound.msg));
+    return Promise.resolve(card); // res.send({ data: card });
+  }).catch((err) => Promise.reject(err));
 }
 
-function likeCard(req, res) {
+function likeCard(req, res, next) {
+  // console.log(`Card 2 like ${req.params.cardId} 4 user: ${req.user._id}`);
+  updateCardById(req.params.cardId, { $addToSet: { likes: req.user._id } }).then((card) => {
+    res.send({ data: card });
+  }).catch((err) => {
+    next(err);
+  });
+}
+
+function dislikeCard(req, res, next) {
+  // console.log(`Card 2 dislike ${req.params.cardId} 4 user: ${req.user._id}`);
+  updateCardById(req.params.cardId, { $pull: { likes: req.user._id } }).then((card) => {
+    res.send({ data: card });
+  }).catch((err) => next(err));
+}
+
+/* function likeCard(req, res) {
   // console.log(`Card 2 like ${req.params.cardId} 4 user: ${req.user._id}`);
   Card.findByIdAndUpdate(
     req.params.cardId,
@@ -88,7 +130,7 @@ function dislikeCard(req, res) {
   }).catch((err) => {
     handleIdErr(res, err);
   });
-}
+} */
 
 module.exports = {
   getCards, createCard, deleteCardById, likeCard, dislikeCard,

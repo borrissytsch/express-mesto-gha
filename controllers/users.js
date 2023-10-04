@@ -2,6 +2,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
+const NotFound = require('../errors/NotFound');
+const ValidationErr = require('../errors/ValidationError');
+const ServerError = require('../errors/ServerError');
 const {
   errIncorrectData, errNotFound, errDefault, errValidationErr,
   errAuth, errIllegalArgsPattern, pswSoltLen, TOKEN_KEY,
@@ -87,7 +90,53 @@ function createUser(req, res, next) {
   });
 }
 
-function updateProfile(req, res) {
+function updateUserById(id, updateData, updateOptions = { new: true, runValidators: true }) {
+  return User.findByIdAndUpdate(id, updateData, updateOptions).then((user) => {
+    if (!user) return Promise.reject(new NotFound());
+    return Promise.resolve(user); // res.send({ data: user });
+  }).catch((err) => Promise.reject(err));
+}
+
+function updateProfile(req, res, next) {
+  const { _id } = req.user;
+  const { name, about } = req.body;
+  try {
+    if (!name || !about) throw new ValidationErr();
+    updateUserById(_id, { name, about }).then((user) => {
+      res.send({ data: user });
+    }).catch((err) => {
+      if (err.name === errValidationErr) next(new ValidationErr());
+      if (err instanceof Error) {
+        next(err);
+      } else {
+        next(new ServerError());
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+function updateAvatar(req, res, next) {
+  const { _id } = req.user;
+  const { avatar } = req.body;
+  try {
+    if (!avatar) throw new ValidationErr();
+    updateUserById(_id, { avatar }).then((user) => {
+      res.send({ data: user });
+    }).catch((err) => {
+      if (err.name === errValidationErr) next(new ValidationErr());
+      if (err instanceof Error) {
+        next(err);
+      } else {
+        next(new ServerError());
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+/* function updateProfile(req, res) {
   const { _id } = req.user;
   User.find({ _id }).then((mongUser) => {
     const {
@@ -135,7 +184,7 @@ function updateAvatar(req, res) {
       res.status(errDefault.num).send({ message: errDefault.msg });
     }
   }));
-}
+} */
 
 function login(req, res) {
   const { email, password } = req.body;
