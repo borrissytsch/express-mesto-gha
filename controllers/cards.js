@@ -3,8 +3,8 @@ const NotFound = require('../errors/NotFound');
 const Forbidden = require('../errors/Forbidden');
 
 const {
-  resOkDefault, errIncorrectData, errNotFound, errDefault, errValidationErr,
-} = require('../utils/constants'); // errCastErr, errName,, errForbidden
+  resOkDefault, errIncorrectData, errDefault, errValidationErr,
+} = require('../utils/constants'); // errCastErr, errName,, errForbidden, errNotFound
 const { logPassLint /* ,handleIdErr */ } = require('../utils/miscutils');
 
 function getCards(req, res) {
@@ -81,18 +81,21 @@ function deleteCardById(req, res, next) {
     next(err);
   });
 }
+
 function updateCardById(id, updateData, updateOptions = { new: true }) {
   return Card.findByIdAndUpdate(id, updateData, updateOptions).then((card) => {
-    if (!card) return Promise.reject(new Error(errNotFound.msg));
+    console.log(`Card after update: ${card}`);
+    if (!card) return Promise.reject(new NotFound());
     return Promise.resolve(card); // res.send({ data: card });
   }).catch((err) => Promise.reject(err));
 }
 
 function likeCard(req, res, next) {
-  // console.log(`Card 2 like ${req.params.cardId} 4 user: ${req.user._id}`);
+  console.log(`Card 2 like ${req.params.cardId} 4 user: ${req.user._id}`);
   updateCardById(req.params.cardId, { $addToSet: { likes: req.user._id } }).then((card) => {
     res.send({ data: card });
   }).catch((err) => {
+    console.log(`Err after update: ${err.name} / ${err}`);
     next(err);
   });
 }
