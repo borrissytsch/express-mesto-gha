@@ -2,7 +2,6 @@ const { MONGODB = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 const mongoose = require('mongoose');
 const express = require('express');
 const bodyParser = require('body-parser');
-// const { celebrate } = require('celebrate');
 const { errors } = require('celebrate');
 
 const auth = require('./middlewares/auth');
@@ -11,7 +10,7 @@ const errHandle = require('./middlewares/errHandle');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const {
-  PORT, USERS, CARDS, /* logger, */errNotFound, // logPassLint,
+  PORT, USERS, CARDS, errNotFound,
 } = require('./utils/constants');
 const { logger, logPassLint } = require('./utils/miscutils');
 const { login, createUser } = require('./controllers/users');

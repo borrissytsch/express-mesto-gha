@@ -110,13 +110,11 @@ module.exports = {
   usrEmailFailMsg,
   usrLinkFailMsg,
   TOKEN_KEY,
-  // id4TokenUser, // temp const 4 1st work, remove it from final ver
   tokenDuration,
   authHeaderPattern,
   authNeedMsg,
   idPattern,
   lnkAvatarPattern,
-  // logger, // moved 2 miscutils
   resOkDefault,
   errIncorrectData,
   errAuth,
@@ -130,6 +128,5 @@ module.exports = {
   errName,
   errIllegalArgsPattern,
   errDuplicateKeyPattern,
-  // logPassLint, // moved 2 miscutils
   pswSoltLen,
 };

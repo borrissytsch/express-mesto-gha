@@ -4,8 +4,8 @@ const Forbidden = require('../errors/Forbidden');
 
 const {
   resOkDefault, errIncorrectData, errDefault, errValidationErr,
-} = require('../utils/constants'); // errCastErr, errName,, errForbidden, errNotFound
-const { logPassLint /* ,handleIdErr */ } = require('../utils/miscutils');
+} = require('../utils/constants');
+const { logPassLint } = require('../utils/miscutils');
 
 function getCards(req, res) {
   Card.find({}).then((cardList) => {
@@ -42,26 +42,6 @@ function createCard(req, res) {
   });
 }
 
-/* function deleteCardById(req, res, next) {
-  const { cardId } = req.params;
-  // console.log(`Delete card by ${cardId}`);
-  Card.findById(cardId).then((card) => {
-    if (!card) return Promise.reject(new NotFound());
-    // console.log(`Del card ${cardId} owned by ${card.owner} starts 4: ${req.user._id}`);
-    if (String(card.owner) !== String(req.user._id)) throw new Forbidden();
-    Card.findByIdAndRemove(cardId).then((MongoCard) => {
-      if (!MongoCard) return Promise.reject(new NotFound());
-      // console.log(`Card ${cardId} was deleted with status: ${resOkDefault} / ${MongoCard}`);
-      return res.status(resOkDefault).send({ data: MongoCard });
-    }).catch((err) => {
-      next(err);
-    });
-    return resOkDefault;
-  }).catch((err) => {
-    next(err);
-  });
-} */
-
 function deleteCardById(req, res, next) {
   const { cardId } = req.params;
   // console.log(`Delete card by ${cardId}`);
@@ -84,18 +64,17 @@ function deleteCardById(req, res, next) {
 
 function updateCardById(id, updateData, updateOptions = { new: true }) {
   return Card.findByIdAndUpdate(id, updateData, updateOptions).then((card) => {
-    console.log(`Card after update: ${card}`);
+    // console.log(`Card after update: ${card}`);
     if (!card) return Promise.reject(new NotFound());
     return Promise.resolve(card); // res.send({ data: card });
   }).catch((err) => Promise.reject(err));
 }
 
 function likeCard(req, res, next) {
-  console.log(`Card 2 like ${req.params.cardId} 4 user: ${req.user._id}`);
+  // console.log(`Card 2 like ${req.params.cardId} 4 user: ${req.user._id}`);
   updateCardById(req.params.cardId, { $addToSet: { likes: req.user._id } }).then((card) => {
     res.send({ data: card });
   }).catch((err) => {
-    console.log(`Err after update: ${err.name} / ${err}`);
     next(err);
   });
 }
@@ -106,34 +85,6 @@ function dislikeCard(req, res, next) {
     res.send({ data: card });
   }).catch((err) => next(err));
 }
-
-/* function likeCard(req, res) {
-  // console.log(`Card 2 like ${req.params.cardId} 4 user: ${req.user._id}`);
-  Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $addToSet: { likes: req.user._id } },
-    { new: true },
-  ).then((card) => {
-    if (!card) return Promise.reject(new Error(errNotFound.msg));
-    return res.send({ data: card });
-  }).catch((err) => {
-    handleIdErr(res, err);
-  });
-}
-
-function dislikeCard(req, res) {
-  // console.log(`Card 2 dislike ${req.params.cardId} 4 user: ${req.user._id}`);
-  Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $pull: { likes: req.user._id } },
-    { new: true },
-  ).then((card) => {
-    if (!card) return Promise.reject(new Error(errNotFound.msg));
-    return res.send({ data: card });
-  }).catch((err) => {
-    handleIdErr(res, err);
-  });
-} */
 
 module.exports = {
   getCards, createCard, deleteCardById, likeCard, dislikeCard,

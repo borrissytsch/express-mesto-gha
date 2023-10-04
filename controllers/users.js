@@ -93,7 +93,7 @@ function createUser(req, res, next) {
 function updateUserById(id, updateData, updateOptions = { new: true, runValidators: true }) {
   return User.findByIdAndUpdate(id, updateData, updateOptions).then((user) => {
     if (!user) return Promise.reject(new NotFound());
-    return Promise.resolve(user); // res.send({ data: user });
+    return Promise.resolve(user);
   }).catch((err) => Promise.reject(err));
 }
 
@@ -136,55 +136,6 @@ function updateAvatar(req, res, next) {
     next(err);
   }
 }
-/* function updateProfile(req, res) {
-  const { _id } = req.user;
-  User.find({ _id }).then((mongUser) => {
-    const {
-      name = mongUser[0].name, about = mongUser[0].about,
-    } = req.body;
-    const retUser = { name, about }; // , avatar
-    return retUser;
-  }).then((upUser) => User.findByIdAndUpdate(
-    _id,
-    upUser,
-    { new: true, runValidators: true },
-  ).then((user) => {
-    res.send({ data: user });
-  }).catch((err) => {
-    if (err.name === errValidationErr) {
-      logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
-      res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
-    } else {
-      logPassLint(`Error ${errDefault.num}: ${err}`, true);
-      res.status(errDefault.num).send({ message: errDefault.msg });
-    }
-  }));
-}
-
-function updateAvatar(req, res) {
-  const { _id } = req.user;
-  User.find({ _id }).then((mongUser) => {
-    const {
-      avatar = mongUser[0].avatar,
-    } = req.body;
-    const retUser = { avatar };
-    return retUser;
-  }).then((upUser) => User.findByIdAndUpdate(
-    _id,
-    upUser,
-    { new: true, runValidators: true },
-  ).then((user) => {
-    res.send({ data: user });
-  }).catch((err) => {
-    if (err.name === errValidationErr) {
-      logPassLint(`Error ${errIncorrectData.num}: ${err}`, true);
-      res.status(errIncorrectData.num).send({ message: errIncorrectData.msg });
-    } else {
-      logPassLint(`Error ${errDefault.num}: ${err}`, true);
-      res.status(errDefault.num).send({ message: errDefault.msg });
-    }
-  }));
-} */
 
 function login(req, res) {
   const { email, password } = req.body;
@@ -193,12 +144,12 @@ function login(req, res) {
     // console.log(`Credentials user: ${user}`);
     const token = jwt.sign({ _id: user._id }, TOKEN_KEY, { expiresIn: tokenDuration });
     // console.log(`Token: ${token}`);
-    res.send({ token }); // сделать запись JWT в httpOnly куку: если не пройдёт - откатить
-    /* res.cookie('jwt', token, {
+    // res.send({ token }); // сделать запись JWT в httpOnly куку: если не пройдёт - откатить
+    res.cookie('jwt', token, {
       // maxAge: tokenDuration, // make function 4 token in sec & so on 2 ms (ms m h d)
       maxAge: 3600000 * 24 * 7, // add a piece 4 token transfer duration
       httpOnly: true,
-    }).end(); */
+    }).end(); /* */
   }).catch((/* err */) => {
     // console.log(`Login error ${err.name}: ${err}`);
     res.status(errAuth.num).send({ message: errAuth.msg });
